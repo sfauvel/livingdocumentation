@@ -1,0 +1,6 @@
+= Sample =
+
+
+== Introduction
+
+Simple doc to test asciidoc transformation to another format.

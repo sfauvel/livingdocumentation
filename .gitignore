@@ -1,0 +1,14 @@
+# IntelliJ
+/.idea/
+*.iml
+
+# Eclipse
+/.settings/
+.project
+.classpath
+
+# Maven
+/target
+
+
+/src/main/java/resources/*.html
