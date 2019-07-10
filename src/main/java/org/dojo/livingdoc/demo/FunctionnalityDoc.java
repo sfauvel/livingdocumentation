@@ -14,11 +14,23 @@ import static java.util.stream.Collectors.joining;
 /**
  * Display annotated method using annotation with attribute.
  *
+ * [source,java,indent=0]
+ * .Annotation declaration
+ * ----
+ * include::{sourcedir}/org/dojo/livingdoc/annotation/Functionnality.java[tags=example]
+ * ----
  *
- * \@Functionnality(name="Living Documentation")
+ * [source,java,indent=0]
+ * .Annotation usage
+ * ----
+ * &#064;Functionnality(name="Living Documentation")
+ * public void generateDoc() {
+ *     // ...
+ * }
+ * ----
  *
  */
-@ClassDemo
+@ClassDemo(label="Annotated method demo")
 public class FunctionnalityDoc {
     public static void main(String[] args) {
         Set<Method> typesAnnotatedWith = getAnnotatedMethod();

@@ -38,6 +38,8 @@ public interface Formatter {
 
     String image(String filename);
 
+    String sourceFragment(String s, String interestingCode);
+
     public static class AsciidoctorFormatter implements Formatter {
 
         @Override
@@ -50,17 +52,17 @@ public interface Formatter {
 
         @Override
         public String description(String description) {
-            return description;
+            return description + "\n";
         }
 
         @Override
         public String paragraph(String content) {
-            return content;
+            return content + "\n";
         }
 
         @Override
         public String tableOfContent() {
-            return ":toc:\n:toclevels: 4\n";
+            return ":toc: left\n:toclevels: 4\n";
         }
 
         @Override
@@ -82,7 +84,7 @@ public interface Formatter {
         }
 
         @Override public String sourceCode(String source) {
-            return block("----", ".highlight,indent=0", source);
+            return block("----", "source,java,indent=0", source);
         }
         @Override public String startDocument(String title) {
             return String.format("= %s\n:toc: left\n:toclevels: 3\n:sectlinks:\n:source-highlighter: coderay", title);
@@ -120,6 +122,13 @@ public interface Formatter {
 
         @Override public String image(String filename) {
             return String.format("\nimage::%s[]\n", filename);
+        }
+
+        @Override
+        public String sourceFragment(String filename, String tag) {
+            return "\n----\n"
+                    + String.format("include::{sourcedir}/%s[tags=%s]\n", filename, tag)
+                    + "----\n";
         }
 
         private String block(String delimiter, String name, String message) {

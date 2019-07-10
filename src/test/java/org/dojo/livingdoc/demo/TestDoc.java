@@ -1,4 +1,4 @@
-package org.dojo.livingdoc.Demo;
+package org.dojo.livingdoc.demo;
 
 import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.JavaClass;

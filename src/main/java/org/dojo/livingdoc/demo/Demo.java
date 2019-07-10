@@ -49,7 +49,10 @@ public class Demo {
                         formatter.tableOfContent() +
                         ":sourcedir: ..\n" +
                         ":source-highlighter: pygments\n" +
-                        formatter.title(2, "Available demo") +
+                        "\ninclude::../README.adoc[]\n" +
+                        formatter.title(2, "Available demos") +
+                        formatter.paragraph("List of demo classes available in this project.") +
+
                         findDemoClasses().stream()
                                 .map(this::formatDemoClass)
                                 .collect(joining("\n")) +
@@ -80,9 +83,8 @@ public class Demo {
     private String includeCodeFragment() {
         return "\n[source,java,indent=0]\n" +
                 ".Some interesting code to show\n" +
-                "----\n" +
-                "include::{sourcedir}/org/dojo/livingdoc/TechnicalStuff.java[tags=InterestingCode]\n" +
-                "----\n";
+                formatter.sourceFragment("org/dojo/livingdoc/TechnicalStuff.java", "InterestingCode");
+
     }
 
 
@@ -137,13 +139,16 @@ public class Demo {
     }
 
     private String formatDemoClass(Class<?> clazz) {
-
         Optional<JavaClass> javaClass = getJavaClass(clazz);
-        String comment = javaClass.map(j -> j.getComment()).orElse("No description");
+        String comment = javaClass.map(j -> j.getComment().replaceAll("&#064;", "@"))
+                .orElse("No description");
 
+        String label = clazz.getDeclaredAnnotation(ClassDemo.class).label();
 
-        return formatter.title(3, clazz.getSimpleName())
+        return formatter.title(3, label.isEmpty()?clazz.getSimpleName():label)
                 + formatter.paragraph(comment)
+                + "\n[source,java,indent=0]\n"
+                + ".Example\n"
                 + formatter.sourceCode("include::{sourcedir}/" + clazz.getName().replaceAll("\\.", "/") + ".java[tags=example]\n");
     }
 

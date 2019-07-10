@@ -7,6 +7,8 @@
     <artifactId>livingdocumentation</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+    <description>Demo of living documenation</description>
+
     <properties>
         <junit.version>5.4.1</junit.version>
         <mockito.version>2.25.1</mockito.version>

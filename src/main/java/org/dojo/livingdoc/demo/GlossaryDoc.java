@@ -5,24 +5,35 @@ import org.dojo.livingdoc.annotation.Glossary;
 import org.reflections.Reflections;
 
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
 
 /**
  * Display annotated classes.
+ *
+ * Retrieve all classes annotated (annotation Glossary) to be included into glossary.
  */
-@ClassDemo
+@ClassDemo(label = "Glossary demo")
 public class GlossaryDoc {
     public static void main(String[] args) {
-        Reflections reflections = new Reflections("org.dojo.livingdoc");
-        Set<Class<?>> typesAnnotatedWith = reflections.getTypesAnnotatedWith(Glossary.class, false);
-
-        String doc = typesAnnotatedWith.stream()
-                .map(Class::getSimpleName)
-                .collect(joining("\n"));
-
-        System.out.println(doc);
-
+        System.out.println(generateGlossary());
     }
+
+    // tag::example[]
+    private static String generateGlossary() {
+
+        return new Reflections("org.dojo.livingdoc")
+                .getTypesAnnotatedWith(Glossary.class, false)
+                .stream()
+                .map(GlossaryDoc::formatGlossary)
+                .collect(joining());
+    }
+
+    /// Format class to generate glossary information.
+    private static String formatGlossary(Class<?> classToDocument) {
+        return classToDocument.getSimpleName() + "\n";
+    }
+    // end::example[]
 }
