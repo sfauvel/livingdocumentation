@@ -12,7 +12,7 @@
     <properties>
         <junit.version>5.4.1</junit.version>
         <mockito.version>2.25.1</mockito.version>
-        <qdox.version>1.6</qdox.version>
+        <qdox.version>2.0-M10</qdox.version>
         <reflections.version>0.9.11</reflections.version>
         <asciidoctorj.version>2.1.0</asciidoctorj.version>
         <javaparser.version>3.14.5</javaparser.version>
@@ -35,7 +35,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>qdox</groupId>
+            <groupId>com.thoughtworks.qdox</groupId>
             <artifactId>qdox</artifactId>
             <version>${qdox.version}</version>
         </dependency>

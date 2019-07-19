@@ -1,6 +1,6 @@
 package org.dojo.livingdoc.demo;
 
-import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -26,11 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestDoc {
 
     public static Collector<CharSequence, ?, String> JOIN_AS_LINES = Collectors.joining("\n");
-    private final JavaSource[] sources;
+    private final Collection<JavaSource> sources;
 
 
     public TestDoc() {
-        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaProjectBuilder builder = new JavaProjectBuilder();
         builder.addSourceTree(new File("src/test/java"));
         sources = builder.getSources();
     }
@@ -66,7 +66,7 @@ public class TestDoc {
     public String formatWithComment(Method method) {
 
         Optional<JavaSource> javaSource = getJavaSourceOf(method.getDeclaringClass());
-        JavaClass javaClass = javaSource.get().getClasses()[0];
+        JavaClass javaClass = javaSource.get().getClasses().get(0);
         JavaMethod javaMethod = javaClass.getMethodBySignature(method.getName(), null);
 
         Optional<String> comment = Optional.ofNullable(javaMethod.getComment());
@@ -76,7 +76,7 @@ public class TestDoc {
     }
 
     private Optional<JavaSource> getJavaSourceOf(Class<?> classToSearch) {
-        return Arrays.stream(sources)
+        return sources.stream()
                 .filter(source -> source.getURL().getPath().endsWith(classToSearch.getSimpleName() + ".java"))
                 .findFirst();
     }

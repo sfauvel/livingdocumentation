@@ -1,12 +1,13 @@
 package org.dojo.livingdoc.demo;
 
-import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaSource;
 import org.dojo.livingdoc.annotation.ClassDemo;
 
 import java.io.File;
+import java.util.Collection;
 
 /**
  * Get description from javadoc comment.
@@ -15,13 +16,13 @@ import java.io.File;
 public class DescriptionDoc {
 
     public static void main(String... args) {
-        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaProjectBuilder builder = new JavaProjectBuilder();
         builder.addSourceTree(new File("src/main/java"));
-        JavaSource[] javaSources = builder.getSources();
+        Collection<JavaSource> javaSources = builder.getSources();
 
 
-        JavaSource javaSource = javaSources[0];
-        JavaClass javaClass = javaSource.getClasses()[0];
+        JavaSource javaSource = javaSources.iterator().next();
+        JavaClass javaClass = javaSource.getClasses().get(0);
 
         String comment = javaClass.getComment();
 

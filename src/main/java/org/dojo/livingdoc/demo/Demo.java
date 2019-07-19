@@ -5,7 +5,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.utils.SourceRoot;
-import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
 import org.asciidoctor.Asciidoctor;
@@ -25,7 +25,7 @@ import static org.asciidoctor.jruby.AsciidoctorJRuby.Factory.create;
 
 public class Demo {
 
-    private final JavaSource[] javaSources;
+    private final Collection<JavaSource> javaSources;
     private final Formatter formatter = new Formatter.AsciidoctorFormatter();
     private final Reflections reflections = new Reflections("org.dojo.livingdoc");
 
@@ -35,7 +35,7 @@ public class Demo {
     }
 
     public Demo() {
-        JavaDocBuilder builder = new JavaDocBuilder();
+        JavaProjectBuilder builder = new JavaProjectBuilder();
         builder.addSourceTree(new File("src/main/java"));
         javaSources = builder.getSources();
 
@@ -153,9 +153,9 @@ public class Demo {
     }
 
     private Optional<JavaClass> getJavaClass(Class<?> clazz) {
-        return Arrays.stream(javaSources)
+        return javaSources.stream()
                 .map(JavaSource::getClasses)
-                .flatMap(Arrays::stream)
+                .flatMap(Collection::stream)
                 .filter(c -> c.isA(clazz.getName()))
                 .findFirst();
     }

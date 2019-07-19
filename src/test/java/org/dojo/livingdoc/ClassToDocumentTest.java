@@ -1,6 +1,6 @@
 package org.dojo.livingdoc;
 
-import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -9,18 +9,19 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClassToDocumentTest {
-	private JavaSource[] sources;
+	private Collection<JavaSource> sources;
 	private Class<?> CLASS_TO_SEARCH = ClassToDocument.class;
 
 	@BeforeEach
 	public void getSources() {
-		JavaDocBuilder builder = new JavaDocBuilder();
+		JavaProjectBuilder builder = new JavaProjectBuilder();
 		builder.addSourceTree(new File("src/main/java"));
 		sources = builder.getSources();
 	}
@@ -32,7 +33,7 @@ public class ClassToDocumentTest {
 	@Test
 	public void sources_contains_source_files_which_are_in_src_main_java() throws Exception {
 
-		Optional<String> sourceFile = Arrays.stream(sources)
+		Optional<String> sourceFile = sources.stream()
 		        .map(source -> source.getURL().getPath())
 		        .filter(path -> path.endsWith(CLASS_TO_SEARCH.getSimpleName() + ".java"))
 		        .findFirst();
@@ -45,7 +46,7 @@ public class ClassToDocumentTest {
 
 		Optional<JavaSource> javaSource = getJavaSourceOf(CLASS_TO_SEARCH);
 
-		Optional<JavaClass> findJavaClass = Arrays.stream(javaSource.get().getClasses())
+		Optional<JavaClass> findJavaClass = javaSource.get().getClasses().stream()
 		        .filter(javaClass -> CLASS_TO_SEARCH.getName().equals(javaClass.getFullyQualifiedName()))
 		        .findFirst();
 
@@ -66,7 +67,7 @@ public class ClassToDocumentTest {
 	public void get_comment_from_javasource() throws Exception {
 
 		Optional<JavaSource> javaSource = getJavaSourceOf(CLASS_TO_SEARCH);
-		JavaClass javaClass = javaSource.get().getClasses()[0];
+		JavaClass javaClass = javaSource.get().getClasses().get(0);
 
 		assertEquals("Class to show QDox usage.", javaClass.getComment());
 	}
@@ -75,7 +76,7 @@ public class ClassToDocumentTest {
 	public void get_class_declaration_line_from_javasource() throws Exception {
 
 		Optional<JavaSource> javaSource = getJavaSourceOf(CLASS_TO_SEARCH);
-		JavaClass javaClass = javaSource.get().getClasses()[0];
+		JavaClass javaClass = javaSource.get().getClasses().get(0);
 
 		String[] lines = javaSource.get().toString().split("\n");
 		assertEquals("public class ClassToDocument {", lines[javaClass.getLineNumber() - 1]);
@@ -85,14 +86,14 @@ public class ClassToDocumentTest {
 	public void get_method_comment_from_javasource() throws Exception {
 
 		Optional<JavaSource> javaSource = getJavaSourceOf(CLASS_TO_SEARCH);
-		JavaClass javaClass = javaSource.get().getClasses()[0];
+		JavaClass javaClass = javaSource.get().getClasses().get(0);
 
 		JavaMethod method = javaClass.getMethodBySignature("simpleMethod", null);
 		assertEquals("Simple method documented.", method.getComment());
 	}
 
 	private Optional<JavaSource> getJavaSourceOf(Class<?> classToSearch) {
-		return Arrays.stream(sources)
+		return sources.stream()
 		        .filter(source -> source.getURL().getPath().endsWith(classToSearch.getSimpleName() + ".java"))
 		        .findFirst();
 	}
