@@ -7,15 +7,19 @@ import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.utils.SourceRoot;
 import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaSource;
 import org.asciidoctor.Asciidoctor;
 import org.dojo.livingdoc.annotation.ClassDemo;
+import org.dojo.livingdoc.annotation.GenerateGraph;
 import org.reflections.Reflections;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,6 +56,9 @@ public class Demo {
                         "\ninclude::../README.adoc[]\n" +
                         formatter.title(2, "Available demos") +
                         formatter.paragraph("List of demo classes available in this project.") +
+                        formatter.paragraph("Each demo is a simple program that illustrate a use case.",
+                                "It contains a main to make it a standalone application.",
+                                "We do not use utilities classes to keep all generation code into a single class.") +
 
                         findDemoClasses().stream()
                                 .map(this::formatDemoClass)
@@ -149,7 +156,35 @@ public class Demo {
                 + formatter.paragraph(comment)
                 + "\n[source,java,indent=0]\n"
                 + ".Example\n"
-                + formatter.sourceCode("include::{sourcedir}/" + clazz.getName().replaceAll("\\.", "/") + ".java[tags=example]\n");
+                + formatter.sourceCode("include::{sourcedir}/" + clazz.getName().replaceAll("\\.", "/") + ".java[tags=example]\n")
+                + "\n"
+                + generateGraphs(clazz);
+
+    }
+
+    private String generateGraphs(Class<?> clazz) {
+        return Arrays.stream(clazz.getDeclaredMethods())
+                .filter(m -> m.isAnnotationPresent(GenerateGraph.class))
+                .map(m -> generateGraph(clazz, m))
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String generateGraph(Class<?> clazz, Method method) {
+        try {
+            String title = "." + method.getDeclaredAnnotation(GenerateGraph.class).name();
+
+            Object o = clazz.getConstructor().newInstance();
+            String graph = method.invoke(o).toString();
+            return title + "\n" + graph;
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
+    private Optional<JavaMethod> getJavaMethod(Class<?> clazz, Method method) {
+        return getJavaClass(clazz)
+                .map(c -> c.getMethodBySignature(method.getName(), Collections.emptyList()));
     }
 
     private Optional<JavaClass> getJavaClass(Class<?> clazz) {

@@ -10,7 +10,7 @@ public interface Formatter {
 
     String description(String description);
 
-    String paragraph(String content);
+    String paragraph(String... content);
 
     String tableOfContent();
 
@@ -56,8 +56,8 @@ public interface Formatter {
         }
 
         @Override
-        public String paragraph(String content) {
-            return content + "\n";
+        public String paragraph(String... content) {
+            return Arrays.stream(content).collect(Collectors.joining("\n")) + "\n\n";
         }
 
         @Override

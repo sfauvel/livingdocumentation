@@ -14,6 +14,9 @@ import static java.util.stream.Collectors.joining;
 /**
  * Display annotated method using annotation with attribute.
  *
+ * We need to create an annotation (here Functionnality) that could be use on each method.
+ * This annotation contains attributs that could be use to specify some information.
+ *
  * [source,java,indent=0]
  * .Annotation declaration
  * ----
@@ -45,6 +48,7 @@ public class FunctionnalityDoc {
     }
 
     // tag::example[]
+    /// Retrieve methods with a specific annotation.
     private static Set<Method> getAnnotatedMethod() {
         String packageToScan = "org.dojo.livingdoc";
         Class<Functionnality> annotationToSearch = Functionnality.class;
@@ -53,9 +57,11 @@ public class FunctionnalityDoc {
 
         return reflections.getMethodsAnnotatedWith(annotationToSearch);
     }
-    // end::example[]
 
-    private static String formatDoc(Method m) {
-        return m.getName() + ":" + m.getDeclaredAnnotation(Functionnality.class).name();
+    /// Extract information from annotation parameters (here the attribute name).
+    private static String formatDoc(Method method) {
+        return method.getName() + ":"
+                + method.getDeclaredAnnotation(Functionnality.class).name();
     }
+    // end::example[]
 }
