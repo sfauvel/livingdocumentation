@@ -1,51 +1,88 @@
 = Living Documentation
 
-== Sources d'information
+This project show some technics to extract documentation from your project like:
 
-=== Annotation
+* Extract code documentation (javadoc)
+* Use annotation
+* Extract xml information
+* Execute code to find values
+* Formating documentation
+* Generate graph
 
-Permet de définir les classes à documenter.
-Possibilité d'ajouter des attributs (pour filtrer ou récupérer un commentaire).
+It's also present use cases like:
 
-Exemples:
+* Create a glossary
+* Retrieve good example from code
+* Visualize workflow
+* Document tests
+* Visualize dependencies
+* Create a release note
 
-* Liste des tests avec mis en forme des noms de méthode et récupération du commentaire
-* Constitution d'un glossaire
-* Exemple de bonnes pratiques
+== Getting started
 
-=== Commentaires
+Prerequisites
 
-Utilisation de QDox pour récupérer les commentaires
+* JDK 11
+* Maven
+* Docker
 
-Exemples:
+This project is auto-documented.
+To generate full documentation, just call
 
-* Détail des commentaires
-* Définition d'un terme métier
+[source, bash]
+----
+. ./generateDoc.sh
+----
 
-=== Parser le code
+When it's done, you can find documentation in ./target/doc/demo.html.
 
-Utilisation de JavaParser pour récupérer de l'information depuis le code directement:
-
-* Afficher le code source
-* Récupérer les imports
-* Récupérer les appels de méthodes
-
-=== Executer le code
-
-Executer le code pour récupérer les appels fait ou les valeurs utilisées.
-
-* Récupération des valeurs par défaut
-
-=== Release note
-
-Exploiter les logs Git
-
-
-== Génération
-
-Utilisation du format asciidoc + graphviz pour générer les documents
-
-* Création basique de fichier au format texte.
-* Création de graph (dépendance, ...)
-
-Le script convertAdoc.sh utilise docker pour générer le fichier final à partir du fichier .adoc
+// == Sources d'information
+//
+// === Annotation
+//
+// Permet de définir les classes à documenter.
+// Possibilité d'ajouter des attributs (pour filtrer ou récupérer un commentaire).
+//
+// Exemples:
+//
+// * Liste des tests avec mis en forme des noms de méthode et récupération du commentaire
+// * Constitution d'un glossaire
+// * Exemple de bonnes pratiques
+//
+// === Commentaires
+//
+// Utilisation de QDox pour récupérer les commentaires
+//
+// Exemples:
+//
+// * Détail des commentaires
+// * Définition d'un terme métier
+//
+// === Parser le code
+//
+// Utilisation de JavaParser pour récupérer de l'information depuis le code directement:
+//
+// * Afficher le code source
+// * Récupérer les imports
+// * Récupérer les appels de méthodes
+//
+// === Executer le code
+//
+// Executer le code pour récupérer les appels fait ou les valeurs utilisées.
+//
+// * Récupération des valeurs par défaut
+//
+// === Release note
+//
+// Exploiter les logs Git
+//
+//
+// == Génération
+//
+// Utilisation du format asciidoc + graphviz pour générer les documents
+//
+// * Création basique de fichier au format texte.
+// * Création de graph (dépendance, ...)
+//
+// Le script convertAdoc.sh utilise docker pour générer le fichier final à partir du fichier .adoc
+//

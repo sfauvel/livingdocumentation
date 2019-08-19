@@ -9,23 +9,23 @@ import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaSource;
-import org.asciidoctor.Asciidoctor;
 import org.dojo.livingdoc.annotation.ClassDemo;
 import org.dojo.livingdoc.annotation.GenerateGraph;
 import org.reflections.Reflections;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
-import static org.asciidoctor.jruby.AsciidoctorJRuby.Factory.create;
 
 public class Demo {
 
@@ -33,9 +33,11 @@ public class Demo {
     private final Formatter formatter = new Formatter.AsciidoctorFormatter();
     private final Reflections reflections = new Reflections("org.dojo.livingdoc");
 
-    public static void main(String... args) throws FileNotFoundException {
-        new Demo().execute();
+    private final Path docPath = Paths.get("./target/doc");
+    private final String docName = "demo.adoc";
 
+    public static void main(String... args) throws IOException {
+        new Demo().execute();
     }
 
     public Demo() {
@@ -45,46 +47,69 @@ public class Demo {
 
     }
 
-    private void execute() throws FileNotFoundException {
+    private void execute() throws IOException {
 
-
-        String doc =
+        String doc = formatter.standardOptions() +
+                formatter.tableOfContent() +
                 formatter.title(1, "Living documentation") +
-                        formatter.tableOfContent() +
-                        ":sourcedir: ..\n" +
-                        ":source-highlighter: pygments\n" +
-                        "\ninclude::../README.adoc[]\n" +
-                        formatter.title(2, "Available demos") +
-                        formatter.paragraph("List of demo classes available in this project.") +
-                        formatter.paragraph("Each demo is a simple program that illustrate a use case.",
-                                "It contains a main to make it a standalone application.",
-                                "We do not use utilities classes to keep all generation code into a single class.") +
+                formatter.include(docPath.relativize(Paths.get(".", "README.adoc")).toString()) +
 
-                        findDemoClasses().stream()
-                                .map(this::formatDemoClass)
-                                .collect(joining("\n")) +
-                        formatter.title(2, "Specifics behavior") +
-                        includeCodeFragment() +
-                        formatter.title(2, "Library dependencies") +
-                        includeGraph();
+                formatter.title(2, "Available demos") +
+                formatter.paragraph("List of demo classes available in this project.") +
+                formatter.paragraph("Each demo is a simple program that illustrate a use case.",
+                        "It contains a main to make it a standalone application.",
+                        "We do not use utilities classes to keep all generation code into a single class.") +
+                findDemoClasses().stream()
+                        .map(this::formatDemoClass)
+                        .collect(joining("\n")) +
 
+                formatter.title(2, "Specifics behavior") +
+                includeCodeFragment() +
+
+                formatter.title(2, "Library dependencies") +
+                includeGraph();
+
+        generateStyle();
         generateReport(doc);
 
 
     }
 
-    private void generateReport(String doc) throws FileNotFoundException {
-        System.out.println(doc);
+    /**
+     * Generate [name]-docinfo.html file that contains style to add to header.
+     *
+     * This file is included by adding metadata :docinfo: at the beginning of the adoc file.
+     * @throws IOException
+     */
+    private void generateStyle() throws IOException {
+        Files.createDirectories(docPath);
 
-        File adocFile = new File("./target/demo.adoc");
+        String style = String.join("\n",
+                "<style>",
+                ".sourceFile {",
+                "    color:grey;",
+                "    //display:none;",
+                "}",
+                "</style>"
+        );
+
+        File adocFile = docPath.resolve(docName.replace(".adoc", "-docinfo.html")).toFile();
+        try (PrintWriter writer = new PrintWriter(new FileOutputStream(adocFile))) {
+            writer.append(style);
+        }
+
+    }
+
+
+    private void generateReport(String doc) throws IOException {
+        System.out.println(doc);
+        Files.createDirectories(docPath);
+
+        File adocFile = docPath.resolve(docName).toFile();
         try (PrintWriter writer = new PrintWriter(new FileOutputStream(adocFile))) {
             writer.append(doc);
         }
 
-        Asciidoctor asciidoctor = create();
-        String html = asciidoctor.convertFile(
-                adocFile,
-                new HashMap<String, Object>());
     }
 
     private String includeCodeFragment() {
@@ -152,7 +177,8 @@ public class Demo {
 
         String label = clazz.getDeclaredAnnotation(ClassDemo.class).label();
 
-        return formatter.title(3, label.isEmpty()?clazz.getSimpleName():label)
+        return formatter.title(3, label.isEmpty() ? clazz.getSimpleName() : label)
+                + formatter.paragraph("\n[.sourceFile]\nFrom: " + clazz.getCanonicalName())
                 + formatter.paragraph(comment)
                 + "\n[source,java,indent=0]\n"
                 + ".Example\n"
