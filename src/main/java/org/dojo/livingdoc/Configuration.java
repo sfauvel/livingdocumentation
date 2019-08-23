@@ -1,6 +1,7 @@
 package org.dojo.livingdoc;
 
 public class Configuration {
+
     public final String version;
     public final boolean verbose;
 
@@ -11,5 +12,13 @@ public class Configuration {
     public Configuration(String version, boolean verbose) {
         this.version = version;
         this.verbose = verbose;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public boolean isVerbose() {
+        return verbose;
     }
 }
