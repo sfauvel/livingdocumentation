@@ -33,7 +33,6 @@ public class ParseDoc {
         final Reflections reflections = new Reflections("org.dojo.livingdoc");
         Set<Class<?>> typesAnnotatedWith = reflections.getTypesAnnotatedWith(ClassDemo.class, false);
 
-        JavaParser javaParser = new JavaParser();
         SourceRoot sourceRoot = new SourceRoot(Paths.get("src/main/java"));
 
         getImports(typesAnnotatedWith, sourceRoot);

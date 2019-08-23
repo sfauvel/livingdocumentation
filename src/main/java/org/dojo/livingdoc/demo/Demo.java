@@ -10,6 +10,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaSource;
 import org.dojo.livingdoc.annotation.ClassDemo;
+import org.dojo.livingdoc.annotation.GenerateDoc;
 import org.dojo.livingdoc.annotation.GenerateGraph;
 import org.reflections.Reflections;
 
@@ -23,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
@@ -47,6 +49,12 @@ public class Demo {
 
     }
 
+
+    private String getGroup(Class<?> clazz) {
+        return clazz.getDeclaredAnnotation(ClassDemo.class).group();
+    }
+
+
     private void execute() throws IOException {
 
         String doc = formatter.standardOptions() +
@@ -56,12 +64,35 @@ public class Demo {
 
                 formatter.title(2, "Available demos") +
                 formatter.paragraph("List of demo classes available in this project.") +
-                formatter.paragraph("Each demo is a simple program that illustrate a use case.",
-                        "It contains a main to make it a standalone application.",
-                        "We do not use utilities classes to keep all generation code into a single class.") +
+                formatter.paragraph("Each demo is a simple program that extract some documentation from the code.",
+                        "It illustrate a use case or a technic.",
+                        "It contains a main to make it a standalone application to be able to see what is generated.",
+                        "We try to not use utilities classes to keep all generation code into a single class.",
+                        "",
+                        "These demonstrations are minimalist.",
+                        "They just show what can be done but not worked in any cases.",
+                        "") +
+
                 findDemoClasses().stream()
-                        .map(this::formatDemoClass)
+                        .filter(c -> getGroup(c).isEmpty())
+                        .map(clazz -> formatDemoClass(clazz, 3))
+                        .sorted()
                         .collect(joining("\n")) +
+
+
+                findDemoClasses().stream()
+                        .filter(Predicate.not(c -> getGroup(c).isEmpty()))
+                        .collect(Collectors.groupingBy(c -> getGroup(c))).entrySet().stream()
+                        .map(c -> {
+                            return formatter.title(3, c.getKey().toString()) +
+                                    c.getValue().stream()
+                                            .map(clazz -> formatDemoClass(clazz, 4))
+                                            .sorted()
+                                            .collect(joining("\n"))
+                                    ;
+                        })
+                        .collect(joining("\n")) +
+
 
                 formatter.title(2, "Specifics behavior") +
                 includeCodeFragment() +
@@ -79,6 +110,7 @@ public class Demo {
      * Generate [name]-docinfo.html file that contains style to add to header.
      *
      * This file is included by adding metadata :docinfo: at the beginning of the adoc file.
+     *
      * @throws IOException
      */
     private void generateStyle() throws IOException {
@@ -170,22 +202,43 @@ public class Demo {
         return reflections.getTypesAnnotatedWith(ClassDemo.class, false);
     }
 
-    private String formatDemoClass(Class<?> clazz) {
+    private String formatDemoClass(Class<?> clazz, int titleLevel) {
         Optional<JavaClass> javaClass = getJavaClass(clazz);
         String comment = javaClass.map(j -> j.getComment().replaceAll("&#064;", "@"))
                 .orElse("No description");
 
         String label = clazz.getDeclaredAnnotation(ClassDemo.class).label();
 
-        return formatter.title(3, label.isEmpty() ? clazz.getSimpleName() : label)
+        return formatter.title(titleLevel, label.isEmpty() ? clazz.getSimpleName() : label)
                 + formatter.paragraph("\n[.sourceFile]\nFrom: " + clazz.getCanonicalName())
                 + formatter.paragraph(comment)
                 + "\n[source,java,indent=0]\n"
-                + ".Example\n"
+                + ".Code to extract information\n"
                 + formatter.sourceCode("include::{sourcedir}/" + clazz.getName().replaceAll("\\.", "/") + ".java[tags=example]\n")
                 + "\n"
-                + generateGraphs(clazz);
+                + generateGraphs(clazz)
+                + generatedDocs(clazz);
 
+    }
+
+    private String generatedDocs(Class<?> clazz) {
+        return Arrays.stream(clazz.getDeclaredMethods())
+                .filter(m -> m.isAnnotationPresent(GenerateDoc.class))
+                .map(m -> generatedDoc(clazz, m))
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String generatedDoc(Class<?> clazz, Method method) {
+        try {
+            String title = "." + method.getDeclaredAnnotation(GenerateDoc.class).name();
+
+            Object o = clazz.getConstructor().newInstance();
+            String doc = method.invoke(o).toString();
+            return title + "\n----\n" + doc + "\n----\n";
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
     }
 
     private String generateGraphs(Class<?> clazz) {

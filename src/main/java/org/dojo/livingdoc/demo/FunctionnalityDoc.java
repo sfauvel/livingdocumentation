@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.joining;
 
 
 /**
- * Display annotated method using annotation with attribute.
+ * Display method with annotation that contains attribute.
  *
  * We need to create an annotation (here Functionnality) that could be use on each method.
  * This annotation contains attributs that could be use to specify some information.
@@ -33,7 +33,7 @@ import static java.util.stream.Collectors.joining;
  * ----
  *
  */
-@ClassDemo(label="Annotated method demo")
+@ClassDemo(group="Annotation", label="Annotated method demo")
 public class FunctionnalityDoc {
     public static void main(String[] args) {
         Set<Method> typesAnnotatedWith = getAnnotatedMethod();

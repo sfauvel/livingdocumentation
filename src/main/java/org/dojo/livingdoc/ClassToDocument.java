@@ -6,7 +6,7 @@ import org.dojo.livingdoc.annotation.Functionnality;
  * Class to show QDox usage.
  */
 public class ClassToDocument {
-	
+
 	/**
 	 * Starting point of the application.
 	 */

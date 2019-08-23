@@ -16,17 +16,17 @@ import java.util.stream.Collectors;
  * An object instance is created and all getters are called using reflexion.
  * Values returned are defaults values returned by the object.
  */
-@ClassDemo
+@ClassDemo(label = "Get information executing code.")
 public class ExecuteDoc {
 
     public static void main(String[] args) throws IllegalAccessException {
 
         System.out.println("Default Configuration");
-        System.out.println(generateDoc(new Configuration()));
+        System.out.println(new ExecuteDoc().generateDoc(new Configuration()));
     }
 
     // tag::example[]
-    private static String generateDoc(Configuration configuration) {
+    private String generateDoc(Configuration configuration) {
         return Arrays.stream(Configuration.class.getDeclaredMethods())
                     .filter(ExecuteDoc::isGetter)
                     .map(m -> formatFn(configuration, m))

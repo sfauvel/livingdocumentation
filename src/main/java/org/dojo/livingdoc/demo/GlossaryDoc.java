@@ -15,7 +15,7 @@ import static java.util.stream.Collectors.joining;
  *
  * Retrieve all classes annotated (annotation Glossary) to be included into glossary.
  */
-@ClassDemo(label = "Glossary demo")
+@ClassDemo(group="Annotation", label = "Glossary demo")
 public class GlossaryDoc {
     public static void main(String[] args) {
         System.out.println(generateGlossary());
