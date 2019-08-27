@@ -20,9 +20,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -98,7 +96,13 @@ public class Demo {
                 includeCodeFragment() +
 
                 formatter.title(2, "Library dependencies") +
-                includeGraph();
+                includeGraph() +
+
+                formatter.title(2, "Change log") +
+                formatter.include("CHANGELOG.adoc");
+        ;
+
+        Files.copy(Paths.get("CHANGELOG.adoc"), Paths.get("./target/doc/CHANGELOG.adoc"), StandardCopyOption.REPLACE_EXISTING);
 
         generateStyle();
         generateReport(doc);

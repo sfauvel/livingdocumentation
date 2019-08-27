@@ -21,7 +21,7 @@ import java.util.stream.StreamSupport;
  *
  * JGit:  https://git-scm.com/book/fr/v2/Embarquer-Git-dans-vos-applications-JGit
  */
-@ClassDemo
+@ClassDemo(group = "Changelog", label = "Extract changelog from git messages")
 public class GitLogMessage {
 
     public final static File GIT_DIR = new File("../.git");
