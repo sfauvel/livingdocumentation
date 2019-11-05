@@ -59,7 +59,7 @@ public class ClassToDocumentTest {
 		Optional<JavaSource> javaSource = getJavaSourceOf(CLASS_TO_SEARCH);
 
 		String source = javaSource.get().toString();
-		assertTrue(source.contains("package org.dojo.livingdoc;"));
+		assertTrue(source.contains("package org.dojo.livingdoc.application;"));
 		assertTrue(source.contains("public class ClassToDocument {"));
 	}
 

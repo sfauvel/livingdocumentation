@@ -1,6 +1,6 @@
 = Living Documentation
 
-This project show some technics to extract documentation from your project like:
+This project show some techniques to extract documentation from your project like:
 
 * Extract code documentation (javadoc)
 * Use annotation

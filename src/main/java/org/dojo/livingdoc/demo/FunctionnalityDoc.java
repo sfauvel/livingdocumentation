@@ -14,8 +14,8 @@ import static java.util.stream.Collectors.joining;
 /**
  * Display method with annotation that contains attribute.
  *
- * We need to create an annotation (here Functionnality) that could be use on each method.
- * This annotation contains attributs that could be use to specify some information.
+ * We need to create an annotation (here Functionnality) that be used on each method to document.
+ * This annotation contains attributs to specify additional information.
  *
  * [source,java,indent=0]
  * .Annotation declaration
@@ -26,40 +26,46 @@ import static java.util.stream.Collectors.joining;
  * [source,java,indent=0]
  * .Annotation usage
  * ----
- * &#064;Functionnality(name="Living Documentation")
- * public void generateDoc() {
- *     // ...
- * }
+ * include::{sourcedir}/org/dojo/livingdoc/demo/FunctionnalityDoc.java[tags=usage]
  * ----
- *
  */
 @ClassDemo(group="Annotation", label="Annotated method demo")
 public class FunctionnalityDoc {
     public static void main(String[] args) {
-        Set<Method> typesAnnotatedWith = getAnnotatedMethod();
+        FunctionnalityDoc functionnalityDoc = new FunctionnalityDoc();
 
+        Set<Method> annotatedMethod = functionnalityDoc.getAnnotatedMethod();
 
-        String doc = typesAnnotatedWith.stream()
-                .map(m -> formatDoc(m))
+        String doc = annotatedMethod.stream()
+                .map(m -> functionnalityDoc.formatDoc(m))
                 .collect(joining("\n"));
 
         System.out.println(doc);
 
     }
 
+    /**
+     * Show a method using annotation.
+     */
+    // tag::usage[]
+    @Functionnality(name="Living Documentation")
+    public void functionnalityToDocument() {
+        // ...
+    }
+    // end::usage[]
+
     // tag::example[]
     /// Retrieve methods with a specific annotation.
-    private static Set<Method> getAnnotatedMethod() {
-        String packageToScan = "org.dojo.livingdoc";
-        Class<Functionnality> annotationToSearch = Functionnality.class;
+    private Set<Method> getAnnotatedMethod() {
 
+        String packageToScan = "org.dojo.livingdoc";
         Reflections reflections = new Reflections(packageToScan, new MethodAnnotationsScanner());
 
-        return reflections.getMethodsAnnotatedWith(annotationToSearch);
+        return reflections.getMethodsAnnotatedWith(Functionnality.class);
     }
 
     /// Extract information from annotation parameters (here the attribute name).
-    private static String formatDoc(Method method) {
+    private String formatDoc(Method method) {
         return method.getName() + ":"
                 + method.getDeclaredAnnotation(Functionnality.class).name();
     }

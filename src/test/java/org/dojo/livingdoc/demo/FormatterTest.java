@@ -16,4 +16,38 @@ public class FormatterTest {
                 "include::{sourcedir}/org/dojo/livingdoc/TechnicalStuff.java[tags=InterestingCode]\n" +
                 "----\n", asciidoc);
     }
+
+
+    @Test
+    public void should_build_source_fragment() {
+        Formatter.Source source = formatter.source("org/dojo/livingdoc/TechnicalStuff.java");
+        assertEquals("\n----\n" +
+                "include::{sourcedir}/org/dojo/livingdoc/TechnicalStuff.java\n" +
+                "----\n", source.toString());
+    }
+
+    @Test
+    public void should_build_source_fragment_with_tag() {
+        Formatter.Source source = formatter.source("org/dojo/livingdoc/TechnicalStuff.java")
+                .withTag("example");
+
+        assertEquals("\n----\n" +
+                "include::{sourcedir}/org/dojo/livingdoc/TechnicalStuff.java[tags=example]\n" +
+                "----\n", source.toString());
+    }
+
+    @Test
+    public void should_build_source_fragment_with_full_information() {
+        Formatter.Source source = formatter.source("org/dojo/livingdoc/TechnicalStuff.java")
+                .withTag("example")
+                .withLanguage("java")
+                .withLegend("My description");
+
+        assertEquals( "\n[source,java,indent=0]\n" +
+                ".My description\n" +
+                "----\n" +
+                "include::{sourcedir}/org/dojo/livingdoc/TechnicalStuff.java[tags=example]\n" +
+                "----\n", source.toString());
+    }
+
 }

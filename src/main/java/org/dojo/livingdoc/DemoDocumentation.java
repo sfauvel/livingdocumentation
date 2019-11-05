@@ -21,10 +21,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
 
@@ -64,36 +68,7 @@ public class DemoDocumentation {
                 formatter.title(1, "Living documentation") +
                 formatter.include(docPath.relativize(Paths.get(".", "README.adoc")).toString()) +
 
-                formatter.title(2, "Available demos") +
-                formatter.paragraph("List of demo classes available in this project.") +
-                formatter.paragraph("Each demo is a simple program that extract some documentation from the code.",
-                        "It illustrate a use case or a technic.",
-                        "It contains a main to make it a standalone application to be able to see what is generated.",
-                        "We try to not use utilities classes to keep all generation code into a single class.",
-                        "",
-                        "These demonstrations are minimalist.",
-                        "They just show what can be done but not worked in any cases.",
-                        "") +
-
-                findDemoClasses().stream()
-                        .filter(c -> getGroup(c).isEmpty())
-                        .map(clazz -> formatDemoClass(clazz, 3))
-                        .sorted()
-                        .collect(joining("\n")) +
-
-
-                findDemoClasses().stream()
-                        .filter(Predicate.not(c -> getGroup(c).isEmpty()))
-                        .collect(Collectors.groupingBy(c -> getGroup(c))).entrySet().stream()
-                        .map(c -> {
-                            return formatter.title(3, c.getKey().toString()) +
-                                    c.getValue().stream()
-                                            .map(clazz -> formatDemoClass(clazz, 4))
-                                            .sorted()
-                                            .collect(joining("\n"))
-                                    ;
-                        })
-                        .collect(joining("\n")) +
+                getAvailableDemosChapter() +
 
 
                 formatter.title(2, "Specifics behavior") +
@@ -111,6 +86,47 @@ public class DemoDocumentation {
 
         generateStyle();
         generateReport(doc);
+
+
+    }
+
+    /**
+     * Create chapter containing all available demos.
+     *
+     * @return
+     */
+    private String getAvailableDemosChapter() {
+
+        return formatter.title(2, "Available demos") +
+                formatter.paragraph("List of demo classes available in this project.") +
+                formatter.paragraph("Each demo is a simple program that extract some documentation from the code.",
+                        "It illustrates a use case or a technique.",
+                        "It contains a 'main' to make it a standalone application to be able to see what is generated",
+                        " and to execute it independently.",
+                        "We try to not use utilities classes to keep all generation code into a single class",
+                        " to have all information necessary to reproduce example",
+                        "",
+                        "These demonstrations are minimalist.",
+                        "They just show what is possible to do but may not worked on more generic cases.",
+                        "") +
+
+                Stream.concat(
+                        findDemoClasses().stream()
+                                .filter(c -> getGroup(c).isEmpty())
+                                .map(clazz -> formatDemoClass(clazz, 3)),
+                        findDemoClasses().stream()
+                                .filter(Predicate.not(c -> getGroup(c).isEmpty()))
+                                .collect(Collectors.groupingBy(c -> getGroup(c))).entrySet().stream()
+                                .map(c -> {
+                                    return formatter.title(3, c.getKey().toString()) +
+                                            c.getValue().stream()
+                                                    .map(clazz -> formatDemoClass(clazz, 4))
+                                                    .sorted()
+                                                    .collect(joining("\n"))
+                                            ;
+                                })
+                ).sorted()
+                        .collect(joining("\n"));
 
 
     }
@@ -218,16 +234,23 @@ public class DemoDocumentation {
 
         String label = clazz.getDeclaredAnnotation(ClassDemo.class).label();
 
-        return formatter.title(titleLevel, label.isEmpty() ? clazz.getSimpleName() : label)
-                + formatter.paragraph("\n[.sourceFile]\nFrom: " + clazz.getCanonicalName())
-                + formatter.paragraph(comment)
-                + "\n[source,java,indent=0]\n"
-                + ".Code to extract information\n"
-                + formatter.sourceCode("include::{sourcedir}/" + clazz.getName().replaceAll("\\.", "/") + ".java[tags=example]\n")
-                + "\n"
-                + generateGraphs(clazz)
-                + generatedDocs(clazz);
+        return String.join("",
+                formatter.title(titleLevel, label.isEmpty() ? clazz.getSimpleName() : label),
+                formatter.paragraph("\n[.sourceFile]\nFrom: " + clazz.getCanonicalName()),
+                formatter.paragraph(comment),
+                formatter.source(classToJavaFile(clazz))
+                        .withTag("example")
+                        .withLanguage("java")
+                        .withLegend("Code to extract information")
+                        .toString(),
+                "",
+                generateGraphs(clazz),
+                generatedDocs(clazz));
 
+    }
+
+    private String classToJavaFile(Class<?> clazz) {
+        return clazz.getName().replaceAll("\\.", "/") + ".java";
     }
 
     private String generatedDocs(Class<?> clazz) {

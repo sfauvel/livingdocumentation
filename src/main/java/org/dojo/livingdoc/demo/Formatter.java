@@ -2,7 +2,13 @@ package org.dojo.livingdoc.demo;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 
 public interface Formatter {
 
@@ -42,6 +48,74 @@ public interface Formatter {
 
     String sourceFragment(String s, String interestingCode);
 
+    Source source(String s);
+
+
+    public static class Source {
+        private String filename;
+        private String tag;
+        private String language;
+        private String legend;
+
+        public Source(String filename) {
+            this.filename = filename;
+        }
+
+        @Override
+        public String toString() {
+            return Arrays.asList(
+                    "",
+                    languageToString(),
+                    legendToString(),
+                    "----",
+                    String.format("include::{sourcedir}/%s%s",
+                            filename,
+                            ofNullable(tagToString()).orElse("")),
+                    "----",
+                    "")
+                    .stream()
+                    .filter(Predicate.not(Objects::isNull))
+                    .collect(Collectors.joining("\n"));
+
+        }
+
+        private String legendToString() {
+            return legend == null
+                    ? null
+                    : String.format(".%s", legend);
+        }
+
+        private String languageToString() {
+            return language == null
+                    ? null
+                    : String.format("[source,%s,indent=0]", language);
+        }
+
+
+        private String tagToString() {
+            return tag == null
+                    ? null
+                    : String.format("[tags=example]", tag);
+        }
+
+        public Source withTag(String tag) {
+            this.tag = tag;
+            return this;
+        }
+
+        public Source withLanguage(String language) {
+            this.language = language;
+            return this;
+
+        }
+
+        public Source withLegend(String legend) {
+            this.legend = legend;
+            return this;
+
+        }
+    }
+
     public static class AsciidoctorFormatter implements Formatter {
 
         @Override
@@ -51,7 +125,7 @@ public interface Formatter {
                     ":source-highlighter: pygments",
                     ":docinfo:",
                     ""
-                    );
+            );
         }
 
         @Override
@@ -110,6 +184,7 @@ public interface Formatter {
         public String include(String filename) {
             return String.format("\ninclude::%s[leveloffset=+1]\n", filename);
         }
+
         @Override
         public String warning(String message) {
             return block("====", "WARNING", message);
@@ -152,6 +227,11 @@ public interface Formatter {
             return "\n----\n"
                     + String.format("include::{sourcedir}/%s[tags=%s]\n", filename, tag)
                     + "----\n";
+        }
+
+        @Override
+        public Source source(String filename) {
+            return new Source(filename);
         }
 
         private String block(String delimiter, String name, String message) {
