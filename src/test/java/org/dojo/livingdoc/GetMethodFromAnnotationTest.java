@@ -1,6 +1,7 @@
 package org.dojo.livingdoc;
 
 import org.dojo.livingdoc.annotation.Functionnality;
+import org.dojo.livingdoc.application.ClassToDocument;
 import org.junit.jupiter.api.Test;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;

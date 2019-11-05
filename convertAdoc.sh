@@ -19,7 +19,7 @@ echo "HTML documentation was generated. You can found it in ${TARGET_PATH}"
 
 docker run -it \
 	-v $(pwd):${DOCKER_WORKDIR}/ \
-	-w ${DOCKER_WORKDIR}/target/doc \
+	-w ${DOCKER_WORKDIR}/${TARGET_PATH} \
     	${DOCKER_IMAGE} \
     	asciidoctor-pdf -r asciidoctor-diagram -a sourcedir=${DOCKER_WORKDIR}/src/main/java ${FILENAME}.adoc
 

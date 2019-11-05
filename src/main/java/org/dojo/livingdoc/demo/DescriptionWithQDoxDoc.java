@@ -2,7 +2,7 @@ package org.dojo.livingdoc.demo;
 
 import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
-import org.dojo.livingdoc.ClassToDocument;
+import org.dojo.livingdoc.application.ClassToDocument;
 import org.dojo.livingdoc.annotation.ClassDemo;
 
 import java.io.File;

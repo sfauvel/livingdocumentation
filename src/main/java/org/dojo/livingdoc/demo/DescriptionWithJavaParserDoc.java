@@ -7,7 +7,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.utils.SourceRoot;
-import org.dojo.livingdoc.ClassToDocument;
+import org.dojo.livingdoc.application.ClassToDocument;
 import org.dojo.livingdoc.annotation.ClassDemo;
 import org.dojo.livingdoc.annotation.GenerateDoc;
 

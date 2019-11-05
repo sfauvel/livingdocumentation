@@ -1,4 +1,4 @@
-package org.dojo.livingdoc;
+package org.dojo.livingdoc.application;
 
 import org.dojo.livingdoc.annotation.Functionnality;
 

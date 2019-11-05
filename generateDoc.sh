@@ -3,6 +3,6 @@
 mvn install
 
 
-mvn exec:java -D"exec.mainClass"="org.dojo.livingdoc.demo.Demo"
+mvn exec:java -D"exec.mainClass"="org.dojo.livingdoc.DemoDocumentation"
 
 . ./convertAdoc.sh

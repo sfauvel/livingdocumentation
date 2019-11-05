@@ -1,4 +1,4 @@
-package org.dojo.livingdoc.demo;
+package org.dojo.livingdoc;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -12,6 +12,7 @@ import com.thoughtworks.qdox.model.JavaSource;
 import org.dojo.livingdoc.annotation.ClassDemo;
 import org.dojo.livingdoc.annotation.GenerateDoc;
 import org.dojo.livingdoc.annotation.GenerateGraph;
+import org.dojo.livingdoc.demo.Formatter;
 import org.reflections.Reflections;
 
 import java.io.File;
@@ -27,20 +28,23 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
 
-public class Demo {
+/**
+ * This class generate documentation of this project.
+ */
+public class DemoDocumentation {
 
     private final Collection<JavaSource> javaSources;
-    private final Formatter formatter = new Formatter.AsciidoctorFormatter();
+    private final org.dojo.livingdoc.demo.Formatter formatter = new Formatter.AsciidoctorFormatter();
     private final Reflections reflections = new Reflections("org.dojo.livingdoc");
 
     private final Path docPath = Paths.get("./target/doc");
     private final String docName = "demo.adoc";
 
     public static void main(String... args) throws IOException {
-        new Demo().execute();
+        new DemoDocumentation().execute();
     }
 
-    public Demo() {
+    public DemoDocumentation() {
         JavaProjectBuilder builder = new JavaProjectBuilder();
         builder.addSourceTree(new File("src/main/java"));
         javaSources = builder.getSources();
@@ -102,6 +106,7 @@ public class Demo {
                 formatter.include("CHANGELOG.adoc");
         ;
 
+        Files.createDirectories(Path.of("target", "doc"));
         Files.copy(Paths.get("CHANGELOG.adoc"), Paths.get("./target/doc/CHANGELOG.adoc"), StandardCopyOption.REPLACE_EXISTING);
 
         generateStyle();

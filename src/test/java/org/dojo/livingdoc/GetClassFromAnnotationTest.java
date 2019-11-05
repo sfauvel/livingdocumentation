@@ -1,16 +1,13 @@
 package org.dojo.livingdoc;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.dojo.livingdoc.annotation.Functionnality;
 import org.dojo.livingdoc.annotation.Glossary;
+import org.dojo.livingdoc.application.City;
+import org.dojo.livingdoc.application.Person;
+import org.dojo.livingdoc.application.TechnicalStuff;
 import org.junit.jupiter.api.Test;
 import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

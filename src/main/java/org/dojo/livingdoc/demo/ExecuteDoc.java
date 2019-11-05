@@ -1,6 +1,6 @@
 package org.dojo.livingdoc.demo;
 
-import org.dojo.livingdoc.Configuration;
+import org.dojo.livingdoc.application.Configuration;
 import org.dojo.livingdoc.annotation.ClassDemo;
 import org.dojo.livingdoc.annotation.GenerateDoc;
 
