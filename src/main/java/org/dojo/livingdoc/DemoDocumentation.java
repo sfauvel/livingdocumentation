@@ -13,6 +13,7 @@ import org.dojo.livingdoc.annotation.ClassDemo;
 import org.dojo.livingdoc.annotation.GenerateDoc;
 import org.dojo.livingdoc.annotation.GenerateGraph;
 import org.dojo.livingdoc.demo.Formatter;
+import org.dojo.livingdoc.demo.GraphvizGenerator;
 import org.reflections.Reflections;
 
 import java.io.File;
@@ -196,31 +197,38 @@ public class DemoDocumentation {
 
         }
 
-        return "\n[graphviz]\n" +
-                "----\n" +
-                "digraph g {\n" +
-                demoClasses.entrySet().stream()
-                        .map(this::formatDependency)
-                        .collect(Collectors.joining("\n")) +
-                "\n}\n" +
-                "----\n"
-                ;
-    }
-
-    private String formatDependency(Map.Entry<Class<?>, List<String>> classListEntry) {
+        GraphvizGenerator graphvizGenerator = new GraphvizGenerator();
         Set<String> importsToShow = Set.of(
                 "org.eclipse.jgit",
                 "com.github.javaparser",
                 "org.reflections",
                 "com.thoughtworks.qdox"
         );
-        return classListEntry.getValue().stream()
-                .map(e -> importsToShow.stream().filter(i -> e.startsWith(i)).findFirst().orElse(null))
-                .distinct()
-                .filter(Objects::nonNull)
-                .map(e -> classListEntry.getKey().getSimpleName() + " -> "
-                        + "\"" + e + "\"")
-                .collect(Collectors.joining("\n"));
+
+        Stream<GraphvizGenerator.Link> linkStream = demoClasses.entrySet().stream().flatMap(classListEntry -> {
+            Stream<String> importsInClass = classListEntry.getValue().stream()
+                    .map(classImports -> keepImportsOfClass(importsToShow, classImports))
+                    .distinct()
+                    .filter(Objects::nonNull);
+
+            return importsInClass.map(e ->
+                    new GraphvizGenerator.Link(
+                            classListEntry.getKey().getSimpleName(),
+                            "\"" + e + "\""
+                    )
+            );
+        });
+
+        linkStream.forEach(graphvizGenerator::addLink);
+
+        return graphvizGenerator.generate();
+    }
+
+    private String keepImportsOfClass(Set<String> importsToShow, String classImports) {
+        return importsToShow.stream()
+                .filter(i -> classImports.startsWith(i))
+                .findFirst()
+                .orElse(null);
     }
 
     private Set<Class<?>> findDemoClasses() {
@@ -266,7 +274,8 @@ public class DemoDocumentation {
 
             Object o = clazz.getConstructor().newInstance();
             String doc = method.invoke(o).toString();
-            return title + "\n----\n" + doc + "\n----\n";
+//            return title + "\n----\n" + doc + "\n----\n";
+            return title + "\n" + doc + "\n";
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
             return e.getMessage();

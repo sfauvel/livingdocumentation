@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GraphvizGenerator {
-    static private class Link {
+    static public class Link {
 
         private final String from;
         private final String to;
@@ -36,7 +36,7 @@ public class GraphvizGenerator {
         return addLink(new Link(from, to));
     }
 
-    private GraphvizGenerator addLink(Link link) {
+    public GraphvizGenerator addLink(Link link) {
         links.add(link);
         return this;
     }

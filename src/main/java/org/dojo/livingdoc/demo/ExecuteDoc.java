@@ -36,7 +36,7 @@ public class ExecuteDoc {
 
     // tag::example[]
     public String generateDoc(Object instance) {
-        return "Default value of " + instance.getClass().getSimpleName() + "\n"
+        return "Default value of " + instance.getClass().getSimpleName() + "\n\n"
                 + Arrays.stream(Configuration.class.getDeclaredMethods())
                     .filter(ExecuteDoc::isGetter)
                     .map(m -> format(instance, m))
