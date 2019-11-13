@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * Execute some code to retrieve information.
  *
- * Sometimes, it's not possible or to difficult to find information directly into the code.
+ * Sometimes, it's not possible or too difficult to find information directly from the code.
  * It could be easier to execute the code to get information.
  *
  * In this demonstration, we are creating a configuration object to get default values.
@@ -36,25 +36,26 @@ public class ExecuteDoc {
 
     // tag::example[]
     public String generateDoc(Object instance) {
-        return "Default value of " + instance.getClass().getSimpleName() + "\n\n"
-                + Arrays.stream(Configuration.class.getDeclaredMethods())
-                    .filter(ExecuteDoc::isGetter)
-                    .map(m -> format(instance, m))
-                    .collect(Collectors.joining("\n"));
+        return String.format("Default values of %s class\n\n", instance.getClass().getSimpleName())
+                + String.format("[options=\"header\"]\n|===\n|Field|Default value\n%s\n|===\n",
+                    Arrays.stream(Configuration.class.getDeclaredMethods())
+                        .filter(this::isGetter)
+                        .map(m -> formatRow(instance, m))
+                        .collect(Collectors.joining("\n")));
     }
 
-    private static boolean isGetter(Method m) {
-        return (m.getName().startsWith("get") || m.getName().startsWith("is"))
-                && Modifier.isPublic(m.getModifiers());
-    }
-
-    private static String format(Object instance, Method method) {
+    private String formatRow(Object instance, Method method) {
         try {
-            return "\t- " + method.getName() + ":" + method.invoke(instance);
+            return String.format("|%s|%s", method.getName(), method.invoke(instance));
 
         } catch (IllegalAccessException | InvocationTargetException e) {
             return "Value could not be retrieve";
         }
+    }
+
+    private boolean isGetter(Method m) {
+        return (m.getName().startsWith("get") || m.getName().startsWith("is"))
+                && Modifier.isPublic(m.getModifiers());
     }
     // end::example[]
 
