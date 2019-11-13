@@ -29,7 +29,7 @@ public class DescriptionWithJavaParserDoc {
         System.out.println(new DescriptionWithJavaParserDoc().generateDoc());
     }
 
-    @GenerateDoc(name = "Javadoc extract from class with a parser")
+    @GenerateDoc(name = "Javadoc extracted from class with a parser")
     // tag::example[]
     public String generateDoc() {
         Class<?> classToDocument = ClassToDocument.class;
