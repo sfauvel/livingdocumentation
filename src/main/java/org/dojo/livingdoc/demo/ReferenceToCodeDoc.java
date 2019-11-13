@@ -1,6 +1,7 @@
 package org.dojo.livingdoc.demo;
 
 import org.dojo.livingdoc.annotation.ClassDemo;
+import org.dojo.livingdoc.annotation.GenerateDoc;
 
 
 /**
@@ -11,23 +12,28 @@ import org.dojo.livingdoc.annotation.ClassDemo;
  * .Define code to include
  * [source,java,indent=0]
  * ----
- *     tag::InterestingCode[]
- *     public void doNothing() {
- *         // Really interesting code.
- *     }
- *     end::InterestingCode[]
+ * // tag::InterestingCode[]
+ * public void doNothing() {
+ * // Really interesting code.
+ * }
+ * // end::InterestingCode[]
  * ----
  */
 @ClassDemo
 public class ReferenceToCodeDoc {
-    // tag::example[]
     public static void main(String[] args) throws IllegalAccessException {
-        String doc =
-                "[source,java,indent=0]\n" +
-                ".Best practice to follow\n" +
-                "----\n" +
-                "include::{sourcedir}/org/dojo/livingdoc/TechnicalStuff.java[tags=InterestingCode]\n" +
-                "----\n";
+        new ReferenceToCodeDoc().includeCodeToDoc();
+    }
+
+    @GenerateDoc(name = "Include a fragment of code")
+    // tag::example[]
+    public String includeCodeToDoc() {
+        return String.join("\n",
+                "[source,java,indent=0]",
+                ".Best practice to follow",
+                "----",
+                "include::{sourcedir}/org/dojo/livingdoc/application/TechnicalStuff.java[tags=InterestingCode]",
+                "----");
     }
     // end::example[]
 

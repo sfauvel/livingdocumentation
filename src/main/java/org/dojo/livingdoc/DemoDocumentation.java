@@ -71,15 +71,9 @@ public class DemoDocumentation {
 
                 getAvailableDemosChapter() +
 
-
-                formatter.title(2, "Specifics behavior") +
-                includeCodeFragment() +
-
                 formatter.title(2, "Library dependencies") +
-                includeGraph() +
+                includeGraph()
 
-                formatter.title(2, "Change log") +
-                formatter.include("CHANGELOG.adoc");
         ;
 
         Files.createDirectories(Path.of("target", "doc"));
@@ -169,14 +163,6 @@ public class DemoDocumentation {
         }
 
     }
-
-    private String includeCodeFragment() {
-        return "\n[source,java,indent=0]\n" +
-                ".Some interesting code to show\n" +
-                formatter.sourceFragment("org/dojo/livingdoc/TechnicalStuff.java", "InterestingCode");
-
-    }
-
 
     private String includeGraph() {
 
@@ -274,7 +260,6 @@ public class DemoDocumentation {
 
             Object o = clazz.getConstructor().newInstance();
             String doc = method.invoke(o).toString();
-//            return title + "\n----\n" + doc + "\n----\n";
             return title + "\n====\n" + doc + "\n====\n";
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
