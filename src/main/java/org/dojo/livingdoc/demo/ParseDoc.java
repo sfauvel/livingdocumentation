@@ -1,18 +1,19 @@
 package org.dojo.livingdoc.demo;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.utils.SourceRoot;
 import org.dojo.livingdoc.annotation.ClassDemo;
+import org.dojo.livingdoc.annotation.GenerateDoc;
 import org.reflections.Reflections;
 
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 
 /**
@@ -25,42 +26,62 @@ import static java.util.stream.Collectors.joining;
 @ClassDemo
 public class ParseDoc {
     public static void main(String[] args) {
-        new ParseDoc().execute();
+        System.out.println(new ParseDoc().execute());
     }
 
-    private void execute() throws Error {
+    @GenerateDoc(name = "Parse code to extract information")
+    // tag::example[]
+    public String execute() throws Error {
 
         final Reflections reflections = new Reflections("org.dojo.livingdoc");
-        Set<Class<?>> typesAnnotatedWith = reflections.getTypesAnnotatedWith(ClassDemo.class, false);
+        Set<Class<?>> typesAnnotatedWith =
+                reflections.getTypesAnnotatedWith(ClassDemo.class, false);
 
         SourceRoot sourceRoot = new SourceRoot(Paths.get("src/main/java"));
 
-        getImports(typesAnnotatedWith, sourceRoot);
+        return getImports(typesAnnotatedWith, sourceRoot)
+                .collect(Collectors.joining("\n"));
 
     }
 
-    GenericVisitorAdapter<Object, List<String>> genericVisitorAdapter = new GenericVisitorAdapter<>() {
-        @Override
-        public Object visit(ImportDeclaration n, List<String> imports) {
-            imports.add(n.getName().asString());
-            return super.visit(n, imports);
-        }
-    };
+    private Stream<String> getImports(Set<Class<?>> typesAnnotatedWith, SourceRoot sourceRoot) {
 
-    private void getImports(Set<Class<?>> typesAnnotatedWith, SourceRoot sourceRoot) {
+        return typesAnnotatedWith.stream().map(aClass -> {
 
-        for (Class<?> aClass : typesAnnotatedWith) {
-
-            CompilationUnit cu = sourceRoot.parse(aClass.getPackage().getName(), aClass.getSimpleName() + ".java");
+            CompilationUnit cu = sourceRoot.parse(
+                    aClass.getPackage().getName(),
+                    aClass.getSimpleName() + ".java");
 
             List<String> imports = new ArrayList();
-            cu.accept(genericVisitorAdapter, imports);
+            cu.accept(new RecordImportsVisitor(), imports);
 
-            System.out.println(aClass.getSimpleName() +
-                imports.stream().map(s -> "  import " + s).collect(Collectors.joining("\n", "\n", "")));
-
-        }
+            return (String.format("* %s\n%s",
+                    aClass.getSimpleName(),
+                    imports.stream()
+                            .distinct()
+                            .filter(importName -> !importName.startsWith("java"))
+                            .map(s -> "** " + s)
+                            .collect(Collectors.joining("\n"))));
+        });
     }
 
+    /// Visitor that record imports
+    class RecordImportsVisitor extends GenericVisitorAdapter<Object, List<String>> {
+        @Override
+        public Object visit(ImportDeclaration declaration, List<String> imports) {
 
+            imports.add(extractPackageFromImport(declaration, imports));
+            return super.visit(declaration, imports);
+        }
+    }
+    // end::example[]
+
+    private String extractPackageFromImport(ImportDeclaration declaration, List<String> imports) {
+        try {
+            Class<?> aClass = Class.forName(declaration.getNameAsString());
+            return aClass.getPackageName();
+        } catch (ClassNotFoundException e) {
+            return declaration.getNameAsString();
+        }
+    }
 }
