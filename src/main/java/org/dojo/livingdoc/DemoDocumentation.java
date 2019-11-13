@@ -275,7 +275,7 @@ public class DemoDocumentation {
             Object o = clazz.getConstructor().newInstance();
             String doc = method.invoke(o).toString();
 //            return title + "\n----\n" + doc + "\n----\n";
-            return title + "\n" + doc + "\n";
+            return title + "\n====\n" + doc + "\n====\n";
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
             return e.getMessage();

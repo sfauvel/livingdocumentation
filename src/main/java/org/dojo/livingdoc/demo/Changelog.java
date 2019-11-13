@@ -19,9 +19,10 @@ import java.nio.file.StandardCopyOption;
  * link:https://keepachangelog.com[]
  *
  * .Changelog example file
- * ----
+ * ====
+ *
  * include::CHANGELOG.adoc[]
- * ----
+ * ====
  *
  * _Example of changelog file when included_
  *

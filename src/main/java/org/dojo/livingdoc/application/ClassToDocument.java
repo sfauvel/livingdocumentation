@@ -5,7 +5,7 @@ import org.dojo.livingdoc.annotation.Functionnality;
 import java.lang.annotation.Annotation;
 
 /**
- * Class to show QDox usage.
+ * Class to show a javadoc extraction.
  */
 public class ClassToDocument {
 
