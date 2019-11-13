@@ -12,6 +12,15 @@
 // ## [Unreleased]
 // == Added
 
+## [1.0.1] - 2019-10-05
+== Changed
+- Improve change log example.
+- Reorganized project.
+
 ## [1.0.0] - 2019-08-27
 == Added
 -  Add a change log example.
+-  Add a workflow graph demo.
+
+== Changed
+-  Improve commit message demo.

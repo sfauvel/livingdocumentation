@@ -9,13 +9,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 /**
- * A simple way to make a change log is to have a changelog file a a asciidoctor file.
+ * A simple way to make a change log is to have a changelog file with an asciidoctor file.
  *
  * It needs to be strict to update file on each changes.
- * But, if merge request is used, it could be verify before accept it.
- * It also could be easly updated when something was forgottten.
+ * But, if merge request is used in development process, it could be verify it was updated before accepting request.
+ * It also easier to update a change log file than rewrite git history when there is something to correct.
  *
- * To find some information to do it well:
+ * To find some information on how to write a change log:
  * link:https://keepachangelog.com[]
  *
  * .Changelog example file
