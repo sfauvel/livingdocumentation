@@ -26,31 +26,33 @@ public class GlossaryDoc {
         System.out.println(new GlossaryDoc().generateGlossary());
     }
 
+    // tag::example[]
     public GlossaryDoc() {
         builder = new JavaProjectBuilder();
         builder.addSourceTree(new File("src/main/java"));
     }
 
+    // end::example[]
+
     @GenerateDoc(name = "Glossary generated")
     // tag::example[]
     public String generateGlossary() {
-
         return new Reflections("org.dojo.livingdoc")
                 .getTypesAnnotatedWith(Glossary.class, false)
                 .stream()
                 .map(this::formatGlossary)
-                .collect(joining());
+                .collect(joining("\n"));
     }
 
     /// Format class to generate glossary information.
     private String formatGlossary(Class<?> classToDocument) {
-        return classToDocument.getSimpleName() + "::" + getDescription(classToDocument) + "\n";
+        return classToDocument.getSimpleName() + "::" + getDescription(classToDocument);
     }
-    // end::example[]
 
     private String getDescription(Class<?> classToDocument) {
         JavaClass javaClass = builder.getClassByName(classToDocument.getCanonicalName());
         return " " + Optional.ofNullable(javaClass.getComment()).orElse("");
-
     }
+    // end::example[]
+
 }

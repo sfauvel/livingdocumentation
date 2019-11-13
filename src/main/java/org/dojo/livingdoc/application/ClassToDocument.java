@@ -2,6 +2,8 @@ package org.dojo.livingdoc.application;
 
 import org.dojo.livingdoc.annotation.Functionnality;
 
+import java.lang.annotation.Annotation;
+
 /**
  * Class to show QDox usage.
  */
@@ -21,8 +23,8 @@ public class ClassToDocument {
 		
 	}
 
-	@Functionnality(name="Living Documentation")
-	public void functionnalityToDocument() {
+	@Functionnality(name="Find all method with a specific annotation.")
+	public void findAnnotatedMethod(Class<? extends Annotation> annotation) {
 
 	}
 }

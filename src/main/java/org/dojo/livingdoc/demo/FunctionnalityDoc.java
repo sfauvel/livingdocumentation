@@ -2,6 +2,7 @@ package org.dojo.livingdoc.demo;
 
 import org.dojo.livingdoc.annotation.ClassDemo;
 import org.dojo.livingdoc.annotation.Functionnality;
+import org.dojo.livingdoc.annotation.GenerateDoc;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 
@@ -29,32 +30,33 @@ import static java.util.stream.Collectors.joining;
  * include::{sourcedir}/org/dojo/livingdoc/demo/FunctionnalityDoc.java[tags=usage]
  * ----
  */
-@ClassDemo(group="Annotation", label="Annotated method demo")
+@ClassDemo(group = "Annotation", label = "Annotated method demo")
 public class FunctionnalityDoc {
+
     public static void main(String[] args) {
         FunctionnalityDoc functionnalityDoc = new FunctionnalityDoc();
 
-        Set<Method> annotatedMethod = functionnalityDoc.getAnnotatedMethod();
-
-        String doc = annotatedMethod.stream()
-                .map(m -> functionnalityDoc.formatDoc(m))
-                .collect(joining("\n"));
-
-        System.out.println(doc);
-
+        System.out.println(functionnalityDoc.generateFunctionnalities());
     }
 
-    /**
-     * Show a method using annotation.
-     */
+    /// Show a method using annotation.
     // tag::usage[]
-    @Functionnality(name="Living Documentation")
+    @Functionnality(name = "Living Documentation")
     public void functionnalityToDocument() {
         // ...
     }
     // end::usage[]
 
+    @GenerateDoc(name = "Functionnalities to document.")
     // tag::example[]
+    public String generateFunctionnalities() {
+        Set<Method> annotatedMethod = getAnnotatedMethod();
+
+        return annotatedMethod.stream()
+                .map(m -> formatDoc(m))
+                .collect(joining("\n\n"));
+    }
+
     /// Retrieve methods with a specific annotation.
     private Set<Method> getAnnotatedMethod() {
 
@@ -66,8 +68,10 @@ public class FunctionnalityDoc {
 
     /// Extract information from annotation parameters (here the attribute name).
     private String formatDoc(Method method) {
-        return method.getName() + ":"
-                + method.getDeclaredAnnotation(Functionnality.class).name();
+        return String.format("*%s* (%s): %s",
+                method.getName(),
+                method.getDeclaringClass().getSimpleName(),
+                method.getDeclaredAnnotation(Functionnality.class).name());
     }
     // end::example[]
 }
