@@ -16,6 +16,16 @@ import static org.dojo.livingdoc.demo.Workflow.State.*;
  *
  * Wokflow configuration is defined in code.
  * We extract information to display a graph.
+ *
+ * We use graphviz to draw the graph.
+ * ****
+ * [graphviz]
+ * ----
+ * digraph g {
+ *    A -> B
+ * }
+ * ----
+ * ****
  */
 @ClassDemo
 public class WorkflowDoc {
