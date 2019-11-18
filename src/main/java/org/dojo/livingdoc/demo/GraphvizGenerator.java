@@ -17,20 +17,36 @@ public class GraphvizGenerator {
             this.from = from;
             this.to = to;
         }
+
+        public String getFrom() {
+            return from;
+        }
+
+        public String getTo() {
+            return to;
+        }
     }
     List<Link> links = new ArrayList<>();
 
     public String generate() {
+        return generate("", "");
+    }
+
+    public String generate(String toInsertBefore, String toInsertAfter) {
         return "\n[graphviz]\n" +
                 "----\n" +
                 "digraph g {\n" +
+                "    rankdir=TB;\n" +
+                toInsertBefore +
                 links.stream()
                         .map(link -> link.from + " -> " + link.to + "\n")
                         .collect(Collectors.joining())+
+                toInsertAfter +
                 "}\n" +
                 "----\n"
-        ;
+                ;
     }
+
 
     public GraphvizGenerator addLink(String from, String to) {
         return addLink(new Link(from, to));

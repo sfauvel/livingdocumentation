@@ -17,11 +17,15 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * Execute Maven command to find dependencies informations.
+ *
+ * Here, we execute mvn dependency:list to retrieve dependencies of each module in project.
+ * Then, we draw a graph with these dependencies.
  */
 @ClassDemo(label = "Execute command to extract information")
 public class MavenDoc {
@@ -33,50 +37,54 @@ public class MavenDoc {
     // tag::example[]
     public String generateDendencies()
             throws ParserConfigurationException, IOException, SAXException {
-//
-////        List<String> recorder = executeCommand(Path.of("."), List.of("pwd"));
-//        List<String> recorder = executeCommand(Path.of("."), List.of("mvn", "dependency:list"));
-////        List<String> recorder = executeCommand("", List.of("ls"));
-//
-//        return recorder.stream().collect(Collectors.joining("\n"));
-////        Element root = parsePom().getDocumentElement();
-////
-////        return root.getElementsByTagName("description").item(0).getTextContent();
-////        return "";
-        List<String> libraries = getLibraries(Path.of("src", "main", "resources", "project"));
-        return libraries.stream()
-                .map(module -> findDependencies(Path.of("src", "main", "resources", "project", module)).stream().collect(Collectors.joining("\n", "Module: " + module+ "\n", "")))
+
+        Path PROJECT_PATH = Path.of("src", "main", "resources", "project");
+        List<String> modules = getModules(PROJECT_PATH);
+
+        String dependenciesGraph = modules.stream()
+                .flatMap(module -> findDependencies(PROJECT_PATH.resolve(module)).stream()
+                        .map(dependency -> String.format("\"%s\" -> \"%s\"", module, dependency))
+                )
                 .collect(Collectors.joining("\n"));
-//        return findDependencies(Path.of(".")).stream().collect(Collectors.joining("\n"));
+
+        return String.join("\n",
+                "",
+                "[graphviz]",
+                "----",
+                "digraph g {",
+                dependenciesGraph,
+                "}",
+                "----");
     }
 
-    private List<String> findDependencies(Path path) {
+    // end::example[]
 
-        // List.of("mvn", "dependency:tree", "-Dincludes=org.spike.*:*:*:*");
+    // tag::example[]
+    private List<String> findDependencies(Path path) {
 
         List<String> recorder = executeCommand(path, List.of("mvn", "dependency:list"));
 
         return recorder.stream()
                 .map(s -> s.replaceFirst("^\\[INFO\\]", ""))
                 .map(String::trim)
-                .peek(System.out::println)
-//                .filter(s -> s.matches("([\\w]+\\.)+[\\w-]+:([\\w-]+):([\\w-]+):([\\w\\.]+):([\\w]+)"))
-//                .filter(s -> s.matches("(([\\w]+\\.)+:([\\w-]+)).*"))
-                .filter(s -> s.matches("([\\w-]+\\.)+([\\w-]+):([\\w-]+):+([\\w-]+)+:([\\w-]+).*"))
-//                .filter(s -> s.startsWith("org.spike."))
+                .filter(isADependencyLine())
                 .map(this::extractArtifact)
                 .collect(Collectors.toList());
     }
 
-    private List<String> getLibraries(Path path) {
+    private List<String> getModules(Path path) {
         return Arrays.stream(path.toFile().listFiles(java.io.File::isDirectory))
                 .filter(f -> Paths.get(f.getPath(), "pom.xml").toFile().exists())
                 .map(java.io.File::getName)
                 .collect(Collectors.toList());
     }
+    // end::example[]
+
+    private Predicate<String> isADependencyLine() {
+        return s -> s.matches("([\\w-]+\\.)+([\\w-]+):([\\w-]+):+([\\w-]+)+:([\\w-]+).*");
+    }
 
     private String extractArtifact(String s) {
-        System.out.println("MavenDoc.extractArtifact " + s);
         return s.split(":")[1];
     }
 
@@ -142,19 +150,10 @@ public class MavenDoc {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
-               if (process!= null) process.destroy();
+            if (process != null) process.destroy();
             if (executorService != null) executorService.shutdown();
         }
 
     }
 
-//    private static Document parsePom()
-//            throws ParserConfigurationException, SAXException, IOException {
-//
-//        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//        DocumentBuilder builder = factory.newDocumentBuilder();
-//
-//        return builder.parse(new File("pom.xml"));
-//    }
-    // end::example[]
 }

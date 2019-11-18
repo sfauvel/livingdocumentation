@@ -68,13 +68,9 @@ public class DemoDocumentation {
                 formatter.tableOfContent() +
                 formatter.title(1, "Living documentation") +
                 formatter.include(docPath.relativize(Paths.get(".", "README.adoc")).toString()) +
-
-                getAvailableDemosChapter() +
-
                 formatter.title(2, "Library dependencies") +
-                includeGraph()
-
-        ;
+                includeGraph() +
+                getAvailableDemosChapter();
 
         Files.createDirectories(Path.of("target", "doc"));
         Files.copy(Paths.get("CHANGELOG.adoc"), Paths.get("./target/doc/CHANGELOG.adoc"), StandardCopyOption.REPLACE_EXISTING);
@@ -205,9 +201,46 @@ public class DemoDocumentation {
             );
         });
 
-        linkStream.forEach(graphvizGenerator::addLink);
 
-        return graphvizGenerator.generate();
+        Set<String> froms = new HashSet<String>();
+        Set<String> tos = new HashSet<String>();
+        linkStream
+                .peek(link -> froms.add(link.getFrom()))
+                .peek(link -> tos.add(link.getTo()))
+                .forEach(graphvizGenerator::addLink);
+
+
+        String demoNodes = froms.stream()
+                .map(from -> String.format("\"%s\" [fillcolor=\"wheat\"]", from))
+                .collect(Collectors.joining("\n"));
+
+
+        String libraryNodes = tos.stream()
+                .map(to -> String.format("%s [fillcolor=\"palegreen3\"]", to))
+                .collect(Collectors.joining("\n"));
+
+        String legend = String.join("\n",
+                "",
+
+                "subgraph cluster_key {",
+                "    label=\"Legend\";",
+                "    rankdir=LR;",
+                "    demo [fillcolor=\"wheat\" label=\"Demo\"];",
+                "    library [fillcolor=\"palegreen3\" label=\"Library\"];",
+                "}"
+
+        );
+
+        return String.join("\n",
+                "In these demos, we use libraries:",
+                importsToShow.stream().
+                        collect(Collectors.joining("\n* ", "\n* ", "\n")),
+                "The graph below shows which libraries is used in demos.",
+
+                graphvizGenerator.generate(
+                        String.join("\n", "node [style=filled]", demoNodes, libraryNodes),
+                        legend)
+        );
     }
 
     private String keepImportsOfClass(Set<String> importsToShow, String classImports) {
