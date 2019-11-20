@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * An object instance is created and all getters are called using reflexion.
  * Values returned are defaults values returned by the object.
  */
-@ClassDemo(label = "Get information executing code.")
+@ClassDemo(group = "Execute to get information", label = "Get information executing code.")
 public class ExecuteDoc {
 
     public static void main(String[] args) throws IllegalAccessException {

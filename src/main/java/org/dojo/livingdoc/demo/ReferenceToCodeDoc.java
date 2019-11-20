@@ -19,7 +19,7 @@ import org.dojo.livingdoc.annotation.GenerateDoc;
  * // end::InterestingCode[]
  * ----
  */
-@ClassDemo
+@ClassDemo(group = "Static analysis", label = "Extract a code fragment")
 public class ReferenceToCodeDoc {
     public static void main(String[] args) throws IllegalAccessException {
         new ReferenceToCodeDoc().includeCodeToDoc();

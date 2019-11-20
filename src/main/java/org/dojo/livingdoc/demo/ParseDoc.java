@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  *
  * JavaParser: https://github.com/javaparser/javaparser
  */
-@ClassDemo
+@ClassDemo(group = "Static analysis", label = "Extract imports parsing code")
 public class ParseDoc {
     public static void main(String[] args) {
         System.out.println(new ParseDoc().execute());

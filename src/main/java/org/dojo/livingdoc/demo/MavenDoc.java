@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * Here, we execute mvn dependency:list to retrieve dependencies of each module in project.
  * Then, we draw a graph with these dependencies.
  */
-@ClassDemo(label = "Execute command to extract information")
+@ClassDemo(group = "Execute to get information", label = "Execute maven command")
 public class MavenDoc {
     public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
         System.out.println(new MavenDoc().generateDendencies());

@@ -32,7 +32,7 @@ import java.nio.file.StandardCopyOption;
  *
  * :leveloffset: 0
  */
-@ClassDemo(group = "Changelog", label = "Include a changelog file")
+@ClassDemo(group = "Change log", label = "Include a changelog file")
 public class Changelog {
 
     // tag::example[]

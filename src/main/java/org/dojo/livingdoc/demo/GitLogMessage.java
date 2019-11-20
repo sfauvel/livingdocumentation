@@ -23,7 +23,7 @@ import java.util.stream.StreamSupport;
  *
  * JGit:  https://git-scm.com/book/fr/v2/Embarquer-Git-dans-vos-applications-JGit
  */
-@ClassDemo(group = "Changelog", label = "Extract changelog from git messages")
+@ClassDemo(group = "Change log", label = "Extract changelog from git messages")
 public class GitLogMessage {
 
     private final Path gitPath = Path.of(".git");

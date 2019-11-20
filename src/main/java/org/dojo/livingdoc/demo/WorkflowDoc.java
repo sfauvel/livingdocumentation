@@ -27,7 +27,7 @@ import static org.dojo.livingdoc.demo.Workflow.State.*;
  * ----
  * ****
  */
-@ClassDemo
+@ClassDemo(group = "Execute to get information", label = "Show workflow from code")
 public class WorkflowDoc {
 
     public static void main(String[] args) {

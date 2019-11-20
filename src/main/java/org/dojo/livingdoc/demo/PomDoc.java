@@ -19,7 +19,7 @@ import java.io.IOException;
  *
  * In this demo, we parse the file and display the content of the 'description' tag.
  */
-@ClassDemo(label = "Extract information from pom.xml")
+@ClassDemo(group = "Static analysis", label = "Extract information from pom.xml")
 public class PomDoc {
     public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
         System.out.println(new PomDoc().generatePomDescription());

@@ -17,11 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
+ * Display contributors calls.
+ *
+ * We execute a method and trace every calls to injected services.
  */
-@ClassDemo
+@ClassDemo(group = "Execute to get information", label = "Show methods called")
 public class CallFlowDoc {
 
     public static void main(String[] args) {
@@ -41,11 +43,15 @@ public class CallFlowDoc {
                     .dropWhile(s -> !s.getClassName().startsWith("org.dojo") )
                     .findFirst().get();
 
-            linksPlantUml.add("\"" + getClassName(x) + "\" -> \""
-                    + invocationOnMock.getMethod().getDeclaringClass().getSimpleName() + "\": "
-                    + invocationOnMock.getMethod().getName() );
+            linksPlantUml.add(plantUmlCall(x, invocationOnMock.getMethod()));
 
             return invocationOnMock.callRealMethod();
+        }
+
+        private String plantUmlCall(StackTraceElement caller, Method methodCalled) {
+            return "\"" + getClassName(caller) + "\" -> \""
+                    + methodCalled.getDeclaringClass().getSimpleName() + "\": "
+                    + methodCalled.getName();
         }
 
 
@@ -68,7 +74,7 @@ public class CallFlowDoc {
     }
 
     /**
-     * Workflow graph.
+     * Generate sequence diagram.
      *
      * @return
      * @throws Error
@@ -78,10 +84,11 @@ public class CallFlowDoc {
     public String generateCallFlow() throws Error {
 
         final TraceAnswer recordCalls = new TraceAnswer();
-        final Notifier notifier = Mockito.mock(NotifierImpl.class, Mockito.withSettings().spiedInstance(new NotifierImpl()).defaultAnswer(recordCalls));
-        final Dao dao = Mockito.mock(DaoImpl.class, Mockito.withSettings().spiedInstance(new DaoImpl(notifier)).defaultAnswer(recordCalls));
-        final Service service = new Service(dao, notifier);
+        final Notifier notifier = spyWithTracer(new NotifierImpl(), recordCalls);
+        final Dao dao = spyWithTracer(new DaoImpl(notifier), recordCalls);
 
+        // Call method to trace
+        final Service service = new Service(dao, notifier);
         service.findHomonyms(5);
 
         return String.join("\n",
@@ -89,8 +96,23 @@ public class CallFlowDoc {
                         ".Calls from Service.findHomonyms method",
                         "[plantuml]",
                         "----",
-                        recordCalls.linksPlantUml.stream().collect(Collectors.joining("\n")),
+                        recordCalls.linksPlantUml.stream()
+                                .collect(Collectors.joining("\n")),
                         "----");
+    }
+
+    /**
+     * Create a spy over a object to trace every methods called.
+     * @param instance
+     * @param recordCalls
+     * @param <T>
+     * @return
+     */
+    private <T> T spyWithTracer(T instance, TraceAnswer recordCalls) {
+        return Mockito.mock((Class<T>) instance.getClass(),
+                Mockito.withSettings()
+                        .spiedInstance(instance)
+                        .defaultAnswer(recordCalls));
     }
     // end::example[]
 
