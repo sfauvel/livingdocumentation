@@ -1,9 +1,6 @@
-package org.dojo.livingdoc.demo;
-
-import org.dojo.livingdoc.annotation.GenerateGraph;
+package org.dojo.livingdoc.tools;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

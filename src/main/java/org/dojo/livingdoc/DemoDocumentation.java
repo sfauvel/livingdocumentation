@@ -12,8 +12,8 @@ import com.thoughtworks.qdox.model.JavaSource;
 import org.dojo.livingdoc.annotation.ClassDemo;
 import org.dojo.livingdoc.annotation.GenerateDoc;
 import org.dojo.livingdoc.annotation.GenerateGraph;
-import org.dojo.livingdoc.demo.Formatter;
-import org.dojo.livingdoc.demo.GraphvizGenerator;
+import org.dojo.livingdoc.tools.Formatter;
+import org.dojo.livingdoc.tools.GraphvizGenerator;
 import org.reflections.Reflections;
 
 import java.io.File;
@@ -22,10 +22,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -39,7 +36,7 @@ import static java.util.stream.Collectors.joining;
 public class DemoDocumentation {
 
     private final Collection<JavaSource> javaSources;
-    private final org.dojo.livingdoc.demo.Formatter formatter = new Formatter.AsciidoctorFormatter();
+    private final Formatter formatter = new Formatter.AsciidoctorFormatter();
     private final Reflections reflections = new Reflections("org.dojo.livingdoc");
 
     private final Path docPath = Paths.get("./target/doc");
@@ -132,19 +129,22 @@ public class DemoDocumentation {
     private void generateStyle() throws IOException {
         Files.createDirectories(docPath);
 
-        String style = String.join("\n",
-                "<style>",
-                ".sourceFile {",
-                "    color:grey;",
-                "    //display:none;",
-                "}",
-                "</style>"
-        );
-
-        File adocFile = docPath.resolve(docName.replace(".adoc", "-docinfo.html")).toFile();
-        try (PrintWriter writer = new PrintWriter(new FileOutputStream(adocFile))) {
-            writer.append(style);
-        }
+//        String style = String.join("\n",
+//                "<style>",
+//                ".sourceFile {",
+//                "    color:grey;",
+//                "    //display:none;",
+//                "}",
+//                "</style>"
+//        );
+//
+//        File adocFile = docPath.resolve(docName.replace(".adoc", "-docinfo.html")).toFile();
+//        try (PrintWriter writer = new PrintWriter(new FileOutputStream(adocFile))) {
+//            writer.append(style);
+//        }
+        Files.copy(Path.of("src", "main", "resources", "style.css"),
+                docPath.resolve(docName.replace(".adoc", "-docinfo.html")),
+                StandardCopyOption.REPLACE_EXISTING);
 
     }
 
@@ -261,8 +261,9 @@ public class DemoDocumentation {
 
         String label = clazz.getDeclaredAnnotation(ClassDemo.class).label();
 
-        return String.join("",
+        return String.join("\n",
                 formatter.title(titleLevel, label.isEmpty() ? clazz.getSimpleName() : label),
+                "ifdef::fullDoc[]",
                 formatter.paragraph("\n[.sourceFile]\nFrom: " + clazz.getCanonicalName()),
                 formatter.paragraph(comment),
                 formatter.source(classToJavaFile(clazz))
@@ -270,6 +271,8 @@ public class DemoDocumentation {
                         .withLanguage("java")
                         .withLegend("Code to extract information")
                         .toString(),
+                "",
+                "endif::[]",
                 "",
                 generateGraphs(clazz),
                 generatedDocs(clazz));

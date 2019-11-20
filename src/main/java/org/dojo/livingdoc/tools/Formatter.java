@@ -1,13 +1,11 @@
-package org.dojo.livingdoc.demo;
+package org.dojo.livingdoc.tools;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 
 public interface Formatter {

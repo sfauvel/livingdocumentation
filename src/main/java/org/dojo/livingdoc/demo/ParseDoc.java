@@ -40,7 +40,8 @@ public class ParseDoc {
         SourceRoot sourceRoot = new SourceRoot(Paths.get("src/main/java"));
 
         return getImports(typesAnnotatedWith, sourceRoot)
-                .collect(Collectors.joining("\n"));
+                .limit(3)
+                .collect(Collectors.joining("\n", "", "\n* ..."));
 
     }
 

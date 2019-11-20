@@ -1,5 +1,6 @@
 package org.dojo.livingdoc.demo;
 
+import org.dojo.livingdoc.tools.Formatter;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
