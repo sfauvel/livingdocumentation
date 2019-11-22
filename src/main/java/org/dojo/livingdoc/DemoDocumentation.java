@@ -39,7 +39,7 @@ public class DemoDocumentation {
     private final Formatter formatter = new Formatter.AsciidoctorFormatter();
     private final Reflections reflections = new Reflections("org.dojo.livingdoc");
 
-    private final Path docPath = Paths.get("./target/doc");
+    private final Path docPath = Paths.get(".","docs");
     private final String docName = "demo.adoc";
 
     public static void main(String... args) throws IOException {
@@ -69,12 +69,11 @@ public class DemoDocumentation {
                 includeGraph() +
                 getAvailableDemosChapter();
 
-        Files.createDirectories(Path.of("target", "doc"));
-        Files.copy(Paths.get("CHANGELOG.adoc"), Paths.get("./target/doc/CHANGELOG.adoc"), StandardCopyOption.REPLACE_EXISTING);
+        Files.createDirectories(docPath);
+        Files.copy(Paths.get("CHANGELOG.adoc"), docPath.resolve("CHANGELOG.adoc"), StandardCopyOption.REPLACE_EXISTING);
 
         generateStyle();
         generateReport(doc);
-
 
     }
 

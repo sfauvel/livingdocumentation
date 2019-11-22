@@ -6,31 +6,35 @@ DOCKER_IMAGE=asciidoctor/docker-asciidoctor
 DOCKER_WORKDIR=/documents
 
 FILENAME=demo
-TARGET_PATH=target/doc
+TARGET_PATH=docs
 
+if [ ! -d ${TARGET_PATH} ]
+then
+    echo "Directory ${TARGET_PATH} does not exists."
+    return
+fi
 
+function generate() {
+    COMMAND="$@"
 
-docker run -it \
-	-v $(pwd):${DOCKER_WORKDIR}/ \
-	-w ${DOCKER_WORKDIR}/${TARGET_PATH} \
-    	${DOCKER_IMAGE} \
-    	asciidoctor -r asciidoctor-diagram -a sourcedir=${DOCKER_WORKDIR}/src/main/java  -o ${FILENAME}-full.html --attribute fullDoc ${FILENAME}.adoc
+    docker run -it \
+        -v $(pwd):${DOCKER_WORKDIR}/ \
+        -w ${DOCKER_WORKDIR}/${TARGET_PATH} \
+            ${DOCKER_IMAGE} \
+                $COMMAND \
+                -r asciidoctor-diagram \
+                -a sourcedir=${DOCKER_WORKDIR}/src/main/java \
+                -a webfonts! \
+                -D . \
+                ${FILENAME}.adoc
+}
 
-echo "HTML full documentation was generated. You can found it in ${TARGET_PATH}"
+generate asciidoctor -o ${FILENAME}-full.html --attribute fullDoc
+echo "HTML full documentation was generated as ${TARGET_PATH}/${FILENAME}-full.html"
 
+generate asciidoctor
+echo "HTML documentation was generated as ${TARGET_PATH}/${FILENAME}.html"
 
-docker run -it \
-	-v $(pwd):${DOCKER_WORKDIR}/ \
-	-w ${DOCKER_WORKDIR}/${TARGET_PATH} \
-    	${DOCKER_IMAGE} \
-    	asciidoctor -r asciidoctor-diagram -a sourcedir=${DOCKER_WORKDIR}/src/main/java ${FILENAME}.adoc
+generate asciidoctor-pdf
+echo "PDF documentation was generated as ${TARGET_PATH}/${FILENAME}.pdf"
 
-echo "HTML documentation was generated. You can found it in ${TARGET_PATH}"
-
-docker run -it \
-	-v $(pwd):${DOCKER_WORKDIR}/ \
-	-w ${DOCKER_WORKDIR}/${TARGET_PATH} \
-    	${DOCKER_IMAGE} \
-    	asciidoctor-pdf -r asciidoctor-diagram -a sourcedir=${DOCKER_WORKDIR}/src/main/java ${FILENAME}.adoc
-
-echo "PDF documentation was generated. You can found it in ${TARGET_PATH}"

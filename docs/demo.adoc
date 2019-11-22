@@ -1,0 +1,604 @@
+:sourcedir: ..
+:source-highlighter: pygments
+:docinfo:
+:toc: left
+:toclevels: 4
+
+= Living documentation
+
+include::../README.adoc[leveloffset=+1]
+
+== Library dependencies
+In these demos, we use libraries:
+
+* com.thoughtworks.qdox
+* org.reflections
+* com.github.javaparser
+* org.eclipse.jgit
+
+The graph below shows which libraries is used in demos.
+
+[graphviz]
+----
+digraph g {
+    rankdir=TB;
+node [style=filled]
+"ParseDoc" [fillcolor="wheat"]
+"FunctionnalityDoc" [fillcolor="wheat"]
+"DescriptionWithQDoxDoc" [fillcolor="wheat"]
+"GlossaryDoc" [fillcolor="wheat"]
+"DescriptionWithJavaParserDoc" [fillcolor="wheat"]
+"GitLogMessage" [fillcolor="wheat"]
+"com.thoughtworks.qdox" [fillcolor="palegreen3"]
+"com.github.javaparser" [fillcolor="palegreen3"]
+"org.reflections" [fillcolor="palegreen3"]
+"org.eclipse.jgit" [fillcolor="palegreen3"]ParseDoc -> "com.github.javaparser"
+ParseDoc -> "org.reflections"
+DescriptionWithJavaParserDoc -> "com.github.javaparser"
+GitLogMessage -> "org.eclipse.jgit"
+FunctionnalityDoc -> "org.reflections"
+GlossaryDoc -> "com.thoughtworks.qdox"
+GlossaryDoc -> "org.reflections"
+DescriptionWithQDoxDoc -> "com.thoughtworks.qdox"
+
+subgraph cluster_key {
+    label="Legend";
+    rankdir=LR;
+    demo [fillcolor="wheat" label="Demo"];
+    library [fillcolor="palegreen3" label="Library"];
+}}
+----
+
+== Available demos
+List of demo classes available in this project.
+
+Each demo is a simple program that extract some documentation from the code.
+It illustrates a use case or a technique.
+It contains a 'main' to make it a standalone application to be able to see what is generated
+ and to execute it independently.
+We try to not use utilities classes to keep all generation code into a single class
+ to have all information necessary to reproduce example
+
+These demonstrations are minimalist.
+They just show what is possible to do but may not worked on more generic cases.
+
+
+
+=== Annotation
+
+==== Annotated method demo
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.FunctionnalityDoc
+
+
+Display method with annotation that contains attribute.
+
+We need to create an annotation (here Functionnality) that be used on each method to document.
+This annotation contains attributs to specify additional information.
+
+[source,java,indent=0]
+.Annotation declaration
+----
+include::{sourcedir}/org/dojo/livingdoc/annotation/Functionnality.java[tags=example]
+----
+
+[source,java,indent=0]
+.Annotation usage
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/FunctionnalityDoc.java[tags=usage]
+----
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/FunctionnalityDoc.java[tags=example]
+----
+
+
+endif::[]
+
+
+.Functionnalities to document.
+====
+*findAnnotatedMethod* (ClassToDocument): Find all method with a specific annotation.
+
+*functionnalityToDocument* (FunctionnalityDoc): Living Documentation
+====
+
+
+==== Glossary demo
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.GlossaryDoc
+
+
+Display annotated classes.
+
+Retrieve all classes annotated (annotation Glossary) to be included into glossary.
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/GlossaryDoc.java[tags=example]
+----
+
+
+endif::[]
+
+
+.Glossary generated
+====
+City:: Description of a city.
+Person:: A physical person.
+====
+
+
+=== Change log
+
+==== Extract changelog from git messages
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.GitLogMessage
+
+
+Extract commit messages from Git.
+
+It can be used to generate release note.
+
+JGit:  https://git-scm.com/book/fr/v2/Embarquer-Git-dans-vos-applications-JGit
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/GitLogMessage.java[tags=example]
+----
+
+
+endif::[]
+
+
+.Git history:
+====
+* *21/11/2019* (7dc8ed7417): Reorganized project, add style, generate full and light doc
+* *20/11/2019* (634bf44e48): Reorganize demo
+* *20/11/2019* (831d425b5c): Add sequence diagram with plantuml
+* *19/11/2019* (e64c84b03d): Add example of running a shell command to rerieve informations
+* *14/11/2019* (f139fe0d62): Begin to execute Maven command
+* *14/11/2019* (fd63952379): Improve workflow documentation
+* *14/11/2019* (353117a3f2): Clean some useless examples
+* *14/11/2019* (55923159b4): Inprove documentation parsing code
+* *13/11/2019* (710cd00ab7): Inprove documentation from execution
+* *13/11/2019* (5069669ce9): Inprove documentation from qdox
+====
+
+
+==== Include a changelog file
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.Changelog
+
+
+A simple way to make a change log is to have a changelog file with an asciidoctor file.
+
+It needs to be strict to update file on each changes.
+But, if merge request is used in development process, it could be verify it was updated before accepting request.
+It also easier to update a change log file than rewrite git history when there is something to correct.
+
+To find some information on how to write a change log:
+link:https://keepachangelog.com[]
+
+.Changelog example file
+====
+
+include::CHANGELOG.adoc[]
+====
+
+_Example of changelog file when included_
+
+:leveloffset: 4
+
+include::CHANGELOG.adoc[]
+
+:leveloffset: 0
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/Changelog.java[tags=example]
+----
+
+
+endif::[]
+
+
+
+
+=== Execute to get information
+
+==== Execute maven command
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.MavenDoc
+
+
+Execute Maven command to find dependencies informations.
+
+Here, we execute mvn dependency:list to retrieve dependencies of each module in project.
+Then, we draw a graph with these dependencies.
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/MavenDoc.java[tags=example]
+----
+
+
+endif::[]
+
+
+.Dependencies executing maven command
+====
+
+[graphviz]
+----
+digraph g {
+"moduleE" -> "fake-moduleB"
+"moduleE" -> "fake-moduleA"
+"moduleB" -> "fake-moduleA"
+"moduleC" -> "fake-moduleA"
+}
+----
+====
+
+
+==== Get information executing code.
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.ExecuteDoc
+
+
+Execute some code to retrieve information.
+
+Sometimes, it's not possible or too difficult to find information directly from the code.
+It could be easier to execute the code to get information.
+
+In this demonstration, we are creating a configuration object to get default values.
+
+An object instance is created and all getters are called using reflexion.
+Values returned are defaults values returned by the object.
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/ExecuteDoc.java[tags=example]
+----
+
+
+endif::[]
+
+
+.Default values of getter methods
+====
+Default values of Configuration class
+
+[options="header"]
+|===
+|Field|Default value
+|isVerbose|false
+|getVersion|5.2
+|===
+
+====
+
+
+==== Show methods called
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.CallFlowDoc
+
+
+Display contributors calls.
+
+We execute a method and trace every calls to injected services.
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/CallFlowDoc.java[tags=example]
+----
+
+
+endif::[]
+
+.Call flow generated
+
+.Calls from Service.findHomonyms method
+[plantuml]
+----
+"Service" -> "DaoImpl": findById
+"DaoImpl" -> "NotifierImpl": send
+"Service" -> "DaoImpl": searchWithName
+"DaoImpl" -> "NotifierImpl": send
+"Service" -> "NotifierImpl": send
+----
+
+
+==== Show workflow from code
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.WorkflowDoc
+
+
+Show algorithm workflow.
+
+Wokflow configuration is defined in code.
+We extract information to display a graph.
+
+We use graphviz to draw the graph.
+****
+[graphviz]
+----
+digraph g {
+   A -> B
+}
+----
+****
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/WorkflowDoc.java[tags=example]
+----
+
+
+endif::[]
+
+.Workflow graph generated
+
+[graphviz]
+----
+digraph g {
+OPEN -> RESOLVED
+OPEN -> IN_PROGRESS
+OPEN -> CLOSED
+RESOLVED -> REOPENED
+RESOLVED -> CLOSED
+IN_PROGRESS -> OPEN
+IN_PROGRESS -> RESOLVED
+REOPENED -> CLOSED
+REOPENED -> IN_PROGRESS
+
+}
+----
+
+
+=== Extract javadoc
+
+==== JavaDoc with JavaParser
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.DescriptionWithJavaParserDoc
+
+
+Get description from javadoc comment using JavaParser.
+
+It's a simple example retrieve javadoc from class and methods.
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/DescriptionWithJavaParserDoc.java[tags=example]
+----
+
+
+endif::[]
+
+
+.Javadoc extracted from class with a parser
+====
+org.dojo.livingdoc.application.ClassToDocument:
+Class to show a javadoc extraction.
+
+- main: Starting point of the application.
+- simpleMethod: Simple method documented.
+- findAnnotatedMethod: No description.
+
+====
+
+
+==== JavaDoc with QDox
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.DescriptionWithQDoxDoc
+
+
+Get description from javadoc comment with QDox.
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/DescriptionWithQDoxDoc.java[tags=example]
+----
+
+
+endif::[]
+
+
+.Javadoc extracted from class with QDox
+====
+ClassToDocument: 
+Class to show a javadoc extraction.
+
+- main: Starting point of the application.
+- simpleMethod: Simple method documented.
+- findAnnotatedMethod: null
+====
+
+
+=== Static analysis
+
+==== Extract a code fragment
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.ReferenceToCodeDoc
+
+
+Extract a code fragment to include in documentation.
+
+To identify code to include into documentation, it have to be surrounded by tag::[TAG] and end::[TAG].
+
+.Define code to include
+[source,java,indent=0]
+----
+// tag::InterestingCode[]
+public void doNothing() {
+// Really interesting code.
+}
+// end::InterestingCode[]
+----
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/ReferenceToCodeDoc.java[tags=example]
+----
+
+
+endif::[]
+
+
+.Include a fragment of code
+====
+[source,java,indent=0]
+.Best practice to follow
+----
+include::{sourcedir}/org/dojo/livingdoc/application/TechnicalStuff.java[tags=InterestingCode]
+----
+====
+
+
+==== Extract imports parsing code
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.ParseDoc
+
+
+Parse code to extract informations.
+
+We can retrieve import, conditions, attributes, ...
+
+JavaParser: https://github.com/javaparser/javaparser
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/ParseDoc.java[tags=example]
+----
+
+
+endif::[]
+
+
+.Parse code to extract information
+====
+* ParseDoc
+** com.github.javaparser.ast
+** com.github.javaparser.ast.visitor
+** com.github.javaparser.utils
+** org.dojo.livingdoc.annotation
+** org.reflections
+* DescriptionWithJavaParserDoc
+** com.github.javaparser.ast
+** com.github.javaparser.ast.body
+** com.github.javaparser.ast.comments
+** com.github.javaparser.ast.visitor
+** com.github.javaparser.javadoc.description
+** com.github.javaparser.utils
+** org.dojo.livingdoc.application
+** org.dojo.livingdoc.annotation
+* ExecuteDoc
+** org.dojo.livingdoc.application
+** org.dojo.livingdoc.annotation
+* ...
+====
+
+
+==== Extract information from pom.xml
+
+ifdef::fullDoc[]
+
+[.sourceFile]
+From: org.dojo.livingdoc.demo.PomDoc
+
+
+Extract information from pom.xml (or a xml file).
+
+You may have some information stored in a XML file like the project description into the pom.xml.
+
+In this demo, we parse the file and display the content of the 'description' tag.
+
+
+
+[source,java,indent=0]
+.Code to extract information
+----
+include::{sourcedir}/org/dojo/livingdoc/demo/PomDoc.java[tags=example]
+----
+
+
+endif::[]
+
+
+.Content of tag 'description' from pom.xml
+====
+Demo of living documentation
+====
