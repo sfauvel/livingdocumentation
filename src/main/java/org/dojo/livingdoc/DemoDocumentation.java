@@ -39,7 +39,7 @@ public class DemoDocumentation {
     private final Formatter formatter = new Formatter.AsciidoctorFormatter();
     private final Reflections reflections = new Reflections("org.dojo.livingdoc");
 
-    private final Path docPath = Paths.get(".","docs");
+    private final Path docPath = Paths.get("target","adoc");
     private final String docName = "demo.adoc";
 
     public static void main(String... args) throws IOException {

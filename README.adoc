@@ -34,7 +34,9 @@ To generate full documentation, just call
 . ./generateDoc.sh
 ----
 
-When it's done, you can find documentation in ./target/doc/demo.html.
+Documentation is generated in ./target/docs folder.
+
+A generated documentation is already available here: link:https://sfauvel.github.io/livingdocumentation[]
 
 // == Sources d'information
 //
