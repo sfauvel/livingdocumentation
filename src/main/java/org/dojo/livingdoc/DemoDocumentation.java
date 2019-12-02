@@ -12,8 +12,9 @@ import com.thoughtworks.qdox.model.JavaSource;
 import org.dojo.livingdoc.annotation.ClassDemo;
 import org.dojo.livingdoc.annotation.GenerateDoc;
 import org.dojo.livingdoc.annotation.GenerateGraph;
-import org.dojo.livingdoc.tools.Formatter;
-import org.dojo.livingdoc.tools.GraphvizGenerator;
+import org.sfvl.livingdoc.Formatter;
+import org.sfvl.livingdoc.asciidoctor.AsciidoctorFormatter;
+import org.sfvl.livingdoc.asciidoctor.GraphvizGenerator;
 import org.reflections.Reflections;
 
 import java.io.File;
@@ -36,7 +37,7 @@ import static java.util.stream.Collectors.joining;
 public class DemoDocumentation {
 
     private final Collection<JavaSource> javaSources;
-    private final Formatter formatter = new Formatter.AsciidoctorFormatter();
+    private final Formatter formatter = new AsciidoctorFormatter();
     private final Reflections reflections = new Reflections("org.dojo.livingdoc");
 
     private final Path docPath = Paths.get("target","adoc");

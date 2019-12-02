@@ -88,3 +88,9 @@ A generated documentation is already available here: link:https://sfauvel.github
 //
 // Le script convertAdoc.sh utilise docker pour générer le fichier final à partir du fichier .adoc
 //
+
+
+// == Resources
+//
+// * link::https://dzone.com/articles/generate-java-code-documentation-with-qdox-ejs-nashorn-and-asciidoctor[]
+// * link:http://binout.github.io/asciidoctor-quickie/asciidoctor-quickie.html

@@ -1,6 +1,6 @@
 package org.dojo.livingdoc.demo;
 
-import org.dojo.livingdoc.tools.GraphvizGenerator;
+import org.sfvl.livingdoc.asciidoctor.GraphvizGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

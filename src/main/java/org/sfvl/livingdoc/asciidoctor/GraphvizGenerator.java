@@ -1,4 +1,4 @@
-package org.dojo.livingdoc.tools;
+package org.sfvl.livingdoc.asciidoctor;
 
 import java.util.ArrayList;
 import java.util.List;

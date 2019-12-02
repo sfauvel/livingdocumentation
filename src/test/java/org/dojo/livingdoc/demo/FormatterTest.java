@@ -1,13 +1,14 @@
 package org.dojo.livingdoc.demo;
 
-import org.dojo.livingdoc.tools.Formatter;
+import org.sfvl.livingdoc.Formatter;
 import org.junit.jupiter.api.Test;
+import org.sfvl.livingdoc.asciidoctor.AsciidoctorFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FormatterTest {
 
-    Formatter.AsciidoctorFormatter formatter = new Formatter.AsciidoctorFormatter();
+    AsciidoctorFormatter formatter = new AsciidoctorFormatter();
 
     @Test
     public void should_include_a_code_fragment() {
