@@ -10,10 +10,13 @@ import java.util.stream.Collectors;
 
 public class TableGenerator implements Generator {
 
-
-
     public TableGenerator with(ColumnGenerator columnGenerator) {
         this.columnGenerator = columnGenerator;
+        return this;
+    }
+
+    public TableGenerator withHeader(List<String> header) {
+        this.header = header;
         return this;
     }
 
@@ -32,6 +35,7 @@ public class TableGenerator implements Generator {
         }
     }
 
+    private List<String> header;
     private ColumnGenerator columnGenerator = new ColumnGenerator();
     private List<List<String>> data;
 
@@ -43,9 +47,17 @@ public class TableGenerator implements Generator {
     public String generate() {
         return joinLines(
                 "|====",
+                generateHeader(),
                 columnGenerator.generate(),
                 data.stream().map(this::generateLine).collect(Collectors.joining("\n")),
                 "|====");
+    }
+
+    private String generateHeader() {
+        if (header == null) {
+            return "";
+        }
+        return generateLine(header) + "\n";
     }
 
     private String joinLines(String... lines) {

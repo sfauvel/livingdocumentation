@@ -48,6 +48,25 @@ class TableGeneratorTest {
     }
 
     @Test
+    public void should_create_a_table_with_header() {
+        final String asciidoc = new TableGenerator()
+                .withHeader(List.of("A", "B", "C"))
+                .withData(List.of(
+                        List.of("a", "b", "c")
+                ))
+                .generate();
+
+        assertEquals(String.join("\n",
+                "|====",
+                "| A | B | C",
+                "",
+                "| a | b | c",
+                "|===="
+                )
+                ,asciidoc);
+    }
+
+    @Test
     public void should_specify_auto_column_size() {
         final String asciidoc = new TableGenerator()
                 .with(new TableGenerator.ColumnGenerator().autowidth())
