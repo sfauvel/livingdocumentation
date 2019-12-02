@@ -26,4 +26,42 @@ class TableGeneratorTest {
                 )
                 ,asciidoc);
     }
+
+    @Test
+    public void should_create_a_table_with_multi_lines() {
+        final String asciidoc = new TableGenerator()
+                .withData(List.of(
+                        List.of("A", "B", "C"),
+                        List.of("a", "b", "c"),
+                        List.of("x", "y", "z")
+                ))
+                .generate();
+
+        assertEquals(String.join("\n",
+                "|====",
+                "| A | B | C",
+                "| a | b | c",
+                "| x | y | z",
+                "|===="
+                )
+                ,asciidoc);
+    }
+
+    @Test
+    public void should_specify_auto_column_size() {
+        final String asciidoc = new TableGenerator()
+                .with(new TableGenerator.ColumnGenerator().autowidth())
+                .withData(List.of(
+                        List.of("A", "B", "C")
+                ))
+                .generate();
+
+        assertEquals(String.join("\n",
+                "|====",
+                "[%autowidth]",
+                "| A | B | C",
+                "|===="
+                )
+                ,asciidoc);
+    }
 }
