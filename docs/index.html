@@ -560,6 +560,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_javadoc_with_qdox">JavaDoc with QDox</a></li>
 </ul>
 </li>
+<li><a href="#_reflexion">Reflexion</a>
+<ul class="sectlevel3">
+<li><a href="#_classes_with_main_method">Classes with main method</a></li>
+</ul>
+</li>
 <li><a href="#_static_analysis">Static analysis</a>
 <ul class="sectlevel3">
 <li><a href="#_extract_a_code_fragment">Extract a code fragment</a></li>
@@ -671,6 +676,9 @@ To generate full documentation, just call</p>
 <div class="ulist">
 <ul>
 <li>
+<p>org.reflections</p>
+</li>
+<li>
 <p>com.thoughtworks.qdox</p>
 </li>
 <li>
@@ -679,9 +687,6 @@ To generate full documentation, just call</p>
 <li>
 <p>com.github.javaparser</p>
 </li>
-<li>
-<p>org.reflections</p>
-</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -689,7 +694,7 @@ To generate full documentation, just call</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-5d0989750c422bc9d5bcd45d79ef1b47.png" alt="diag 5d0989750c422bc9d5bcd45d79ef1b47" width="1705" height="207">
+<img src="diag-6b373abc9eec1cc621f8509b5e47c346.png" alt="diag 6b373abc9eec1cc621f8509b5e47c346" width="1899" height="207">
 </div>
 </div>
 </div>
@@ -892,6 +897,18 @@ This annotation contains attributs to specify additional information.</p>
 <div class="ulist">
 <ul>
 <li>
+<p><strong>02/12/2019</strong> (b7861344b4): Add header</p>
+</li>
+<li>
+<p><strong>02/12/2019</strong> (1af1e5d077): Add column options</p>
+</li>
+<li>
+<p><strong>02/12/2019</strong> (8685bdb4aa): Reorganize to create asciidoctor object builder</p>
+</li>
+<li>
+<p><strong>23/11/2019</strong> (ce23a9df10): Publish only index.html in docs folder</p>
+</li>
+<li>
 <p><strong>23/11/2019</strong> (98419f3890): Rename index.html to demo-full.html</p>
 </li>
 <li>
@@ -908,18 +925,6 @@ This annotation contains attributs to specify additional information.</p>
 </li>
 <li>
 <p><strong>20/11/2019</strong> (831d425b5c): Add sequence diagram with plantuml</p>
-</li>
-<li>
-<p><strong>19/11/2019</strong> (e64c84b03d): Add example of running a shell command to rerieve informations</p>
-</li>
-<li>
-<p><strong>14/11/2019</strong> (f139fe0d62): Begin to execute Maven command</p>
-</li>
-<li>
-<p><strong>14/11/2019</strong> (fd63952379): Improve workflow documentation</p>
-</li>
-<li>
-<p><strong>14/11/2019</strong> (353117a3f2): Clean some useless examples</p>
 </li>
 </ul>
 </div>
@@ -1463,6 +1468,104 @@ Class to show a javadoc extraction.</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_reflexion">Reflexion</h3>
+<div class="sect3">
+<h4 id="_classes_with_main_method">Classes with main method</h4>
+<div class="paragraph sourceFile">
+<p>From: org.dojo.livingdoc.demo.FindMainDoc</p>
+</div>
+<div class="paragraph">
+<p>Display classes with a main method.</p>
+</div>
+<div class="paragraph">
+<p>Retrieve all main methods in project using Reflections library.
+We search all classes in given package and retain only those who have a main method.
+Result is display in a list.</p>
+</div>
+<div class="listingblock">
+<div class="title">Code to extract information</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span> <span class="tok-nf">FindMainDoc</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+    <span class="tok-n">builder</span> <span class="tok-o">=</span> <span class="tok-k">new</span> <span class="tok-n">JavaProjectBuilder</span><span class="tok-o">();</span>
+    <span class="tok-n">builder</span><span class="tok-o">.</span><span class="tok-na">addSourceTree</span><span class="tok-o">(</span><span class="tok-k">new</span> <span class="tok-n">File</span><span class="tok-o">(</span><span class="tok-s">&quot;src/main/java&quot;</span><span class="tok-o">));</span>
+<span class="tok-o">}</span>
+
+<span class="tok-kd">public</span> <span class="tok-n">String</span> <span class="tok-nf">generate</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+    <span class="tok-k">return</span> <span class="tok-k">new</span> <span class="tok-n">Reflections</span><span class="tok-o">(</span><span class="tok-s">&quot;org.dojo.livingdoc&quot;</span><span class="tok-o">,</span> <span class="tok-k">new</span> <span class="tok-n">SubTypesScanner</span><span class="tok-o">(</span><span class="tok-kc">false</span><span class="tok-o">))</span>
+            <span class="tok-o">.</span><span class="tok-na">getSubTypesOf</span><span class="tok-o">(</span><span class="tok-n">Object</span><span class="tok-o">.</span><span class="tok-na">class</span><span class="tok-o">).</span><span class="tok-na">stream</span><span class="tok-o">()</span>
+            <span class="tok-o">.</span><span class="tok-na">filter</span><span class="tok-o">(</span><span class="tok-k">this</span><span class="tok-o">::</span><span class="tok-n">isContainMainMethod</span><span class="tok-o">)</span>
+            <span class="tok-o">.</span><span class="tok-na">map</span><span class="tok-o">(</span><span class="tok-n">o</span> <span class="tok-o">-&gt;</span> <span class="tok-n">o</span><span class="tok-o">.</span><span class="tok-na">getSimpleName</span><span class="tok-o">())</span>
+            <span class="tok-o">.</span><span class="tok-na">collect</span><span class="tok-o">(</span><span class="tok-n">joining</span><span class="tok-o">(</span><span class="tok-s">&quot;\n* &quot;</span><span class="tok-o">,</span> <span class="tok-s">&quot;* &quot;</span><span class="tok-o">,</span> <span class="tok-s">&quot;&quot;</span><span class="tok-o">));</span>
+<span class="tok-o">}</span>
+
+<span class="tok-kd">private</span> <span class="tok-kt">boolean</span> <span class="tok-nf">isContainMainMethod</span><span class="tok-o">(</span><span class="tok-n">Class</span><span class="tok-o">&lt;?&gt;</span> <span class="tok-n">aClass</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+    <span class="tok-k">return</span> <span class="tok-n">Arrays</span><span class="tok-o">.</span><span class="tok-na">stream</span><span class="tok-o">(</span><span class="tok-n">aClass</span><span class="tok-o">.</span><span class="tok-na">getDeclaredMethods</span><span class="tok-o">())</span>
+            <span class="tok-o">.</span><span class="tok-na">anyMatch</span><span class="tok-o">(</span><span class="tok-n">m</span> <span class="tok-o">-&gt;</span> <span class="tok-n">Modifier</span><span class="tok-o">.</span><span class="tok-na">isStatic</span><span class="tok-o">(</span><span class="tok-n">m</span><span class="tok-o">.</span><span class="tok-na">getModifiers</span><span class="tok-o">())</span>
+                        <span class="tok-o">&amp;&amp;</span> <span class="tok-n">m</span><span class="tok-o">.</span><span class="tok-na">getName</span><span class="tok-o">().</span><span class="tok-na">equals</span><span class="tok-o">(</span><span class="tok-s">&quot;main&quot;</span><span class="tok-o">)</span>
+            <span class="tok-o">);</span>
+<span class="tok-o">}</span></code></pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="title">Example 9. Classes with main methods generated</div>
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>DescriptionWithQDoxDoc</p>
+</li>
+<li>
+<p>GitLogMessage</p>
+</li>
+<li>
+<p>PomDoc</p>
+</li>
+<li>
+<p>DemoDocumentation</p>
+</li>
+<li>
+<p>GlossaryDoc</p>
+</li>
+<li>
+<p>FindMainDoc</p>
+</li>
+<li>
+<p>AsciidoctorGeneration</p>
+</li>
+<li>
+<p>CallFlowDoc</p>
+</li>
+<li>
+<p>ClassToDocument</p>
+</li>
+<li>
+<p>ExecuteDoc</p>
+</li>
+<li>
+<p>DescriptionWithJavaParserDoc</p>
+</li>
+<li>
+<p>FunctionnalityDoc</p>
+</li>
+<li>
+<p>ParseDoc</p>
+</li>
+<li>
+<p>ReferenceToCodeDoc</p>
+</li>
+<li>
+<p>WorkflowDoc</p>
+</li>
+<li>
+<p>MavenDoc</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_static_analysis">Static analysis</h3>
 <div class="sect3">
 <h4 id="_extract_a_code_fragment">Extract a code fragment</h4>
@@ -1499,7 +1602,7 @@ Class to show a javadoc extraction.</p>
 </div>
 </div>
 <div class="exampleblock">
-<div class="title">Example 9. Include a fragment of code</div>
+<div class="title">Example 10. Include a fragment of code</div>
 <div class="content">
 <div class="listingblock">
 <div class="title">Best practice to follow</div>
@@ -1576,28 +1679,35 @@ Class to show a javadoc extraction.</p>
 </div>
 </div>
 <div class="exampleblock">
-<div class="title">Example 10. Parse code to extract information</div>
+<div class="title">Example 11. Parse code to extract information</div>
 <div class="content">
 <div class="ulist">
 <ul>
 <li>
-<p>ParseDoc</p>
+<p>Changelog</p>
 <div class="ulist">
 <ul>
 <li>
-<p>com.github.javaparser.ast</p>
+<p>org.dojo.livingdoc.annotation</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>com.github.javaparser.ast.visitor</p>
+<p>DescriptionWithQDoxDoc</p>
+<div class="ulist">
+<ul>
+<li>
+<p>com.thoughtworks.qdox</p>
 </li>
 <li>
-<p>com.github.javaparser.utils</p>
+<p>com.thoughtworks.qdox.model</p>
 </li>
 <li>
 <p>org.dojo.livingdoc.annotation</p>
 </li>
 <li>
-<p>org.reflections</p>
+<p>org.dojo.livingdoc.application</p>
 </li>
 </ul>
 </div>
@@ -1624,19 +1734,6 @@ Class to show a javadoc extraction.</p>
 <li>
 <p>com.github.javaparser.utils</p>
 </li>
-<li>
-<p>org.dojo.livingdoc.application</p>
-</li>
-<li>
-<p>org.dojo.livingdoc.annotation</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>ExecuteDoc</p>
-<div class="ulist">
-<ul>
 <li>
 <p>org.dojo.livingdoc.application</p>
 </li>
@@ -1691,7 +1788,7 @@ Class to show a javadoc extraction.</p>
 </div>
 </div>
 <div class="exampleblock">
-<div class="title">Example 11. Content of tag 'description' from pom.xml</div>
+<div class="title">Example 12. Content of tag 'description' from pom.xml</div>
 <div class="content">
 <div class="paragraph">
 <p>Demo of living documentation</p>
@@ -1705,7 +1802,7 @@ Class to show a javadoc extraction.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-11-22 23:59:02 UTC
+Last updated 2020-01-05 22:48:30 UTC
 </div>
 </div>
 </body>
