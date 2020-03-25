@@ -581,6 +581,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_living_documentation">Living Documentation</h2>
 <div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="diag-773fe1ab3b136788855213290bc4a46b.png" alt="diag 773fe1ab3b136788855213290bc4a46b" width="1125" height="328">
+</div>
+</div>
 <div class="paragraph">
 <p>This project show some techniques to extract documentation from your project like:</p>
 </div>
@@ -676,16 +681,19 @@ To generate full documentation, just call</p>
 <div class="ulist">
 <ul>
 <li>
-<p>com.thoughtworks.qdox</p>
+<p>org.reflections</p>
 </li>
 <li>
-<p>org.reflections</p>
+<p>org.eclipse.jgit</p>
+</li>
+<li>
+<p>com.thoughtworks.qdox</p>
 </li>
 <li>
 <p>com.github.javaparser</p>
 </li>
 <li>
-<p>org.eclipse.jgit</p>
+<p>javax.xml.parsers</p>
 </li>
 </ul>
 </div>
@@ -694,7 +702,7 @@ To generate full documentation, just call</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-3512e267b33ad1b1f58044706fbf6401.png" alt="diag 3512e267b33ad1b1f58044706fbf6401" width="1899" height="207">
+<img src="diag-faa59606cf0a8d2aeed6d3924e84f009.png" alt="diag faa59606cf0a8d2aeed6d3924e84f009" width="2077" height="207">
 </div>
 </div>
 </div>
@@ -897,6 +905,9 @@ This annotation contains attributs to specify additional information.</p>
 <div class="ulist">
 <ul>
 <li>
+<p><strong>06/01/2020</strong> (edd8fb0d0a): Add documentation of classes with a main method.</p>
+</li>
+<li>
 <p><strong>05/01/2020</strong> (57326a7b2e): Add documentation of classes with a main method.</p>
 </li>
 <li>
@@ -922,9 +933,6 @@ This annotation contains attributs to specify additional information.</p>
 </li>
 <li>
 <p><strong>19/11/2019</strong> (e64c84b03d): Add example of running a shell command to rerieve informations</p>
-</li>
-<li>
-<p><strong>14/11/2019</strong> (f139fe0d62): Begin to execute Maven command</p>
 </li>
 </ul>
 </div>
@@ -1054,7 +1062,7 @@ Then, we draw a graph with these dependencies.</p>
 <div class="title">Code to extract information</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span> <span class="tok-n">String</span> <span class="tok-nf">generateDendencies</span><span class="tok-o">()</span>
-        <span class="tok-kd">throws</span> <span class="tok-n">ParserConfigurationException</span><span class="tok-o">,</span> <span class="tok-n">IOException</span><span class="tok-o">,</span> <span class="tok-n">SAXException</span> <span class="tok-o">{</span>
+        <span class="tok-kd">throws</span> <span class="tok-n">IOException</span><span class="tok-o">,</span> <span class="tok-n">SAXException</span> <span class="tok-o">{</span>
 
     <span class="tok-n">Path</span> <span class="tok-n">PROJECT_PATH</span> <span class="tok-o">=</span> <span class="tok-n">Path</span><span class="tok-o">.</span><span class="tok-na">of</span><span class="tok-o">(</span><span class="tok-s">&quot;src&quot;</span><span class="tok-o">,</span> <span class="tok-s">&quot;main&quot;</span><span class="tok-o">,</span> <span class="tok-s">&quot;resources&quot;</span><span class="tok-o">,</span> <span class="tok-s">&quot;project&quot;</span><span class="tok-o">);</span>
     <span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-o">&gt;</span> <span class="tok-n">modules</span> <span class="tok-o">=</span> <span class="tok-n">getModules</span><span class="tok-o">(</span><span class="tok-n">PROJECT_PATH</span><span class="tok-o">);</span>
@@ -1171,12 +1179,12 @@ Values returned are defaults values returned by the object.</p>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">getVersion</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">5.2</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">isVerbose</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">getVersion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5.2</p></td>
 </tr>
 </tbody>
 </table>
@@ -1512,52 +1520,52 @@ Result is display in a list.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>DescriptionWithQDoxDoc</p>
-</li>
-<li>
-<p>CallFlowDoc</p>
-</li>
-<li>
-<p>AsciidoctorGeneration</p>
-</li>
-<li>
-<p>ReferenceToCodeDoc</p>
-</li>
-<li>
-<p>GlossaryDoc</p>
-</li>
-<li>
-<p>DescriptionWithJavaParserDoc</p>
+<p>ClassToDocument</p>
 </li>
 <li>
 <p>PomDoc</p>
 </li>
 <li>
-<p>ClassToDocument</p>
+<p>DescriptionWithQDoxDoc</p>
 </li>
 <li>
 <p>WorkflowDoc</p>
 </li>
 <li>
-<p>GitLogMessage</p>
-</li>
-<li>
-<p>DemoDocumentation</p>
-</li>
-<li>
-<p>MavenDoc</p>
-</li>
-<li>
-<p>FindMainDoc</p>
-</li>
-<li>
-<p>ExecuteDoc</p>
+<p>ReferenceToCodeDoc</p>
 </li>
 <li>
 <p>ParseDoc</p>
 </li>
 <li>
+<p>AsciidoctorGeneration</p>
+</li>
+<li>
 <p>FunctionnalityDoc</p>
+</li>
+<li>
+<p>DemoDocumentation</p>
+</li>
+<li>
+<p>CallFlowDoc</p>
+</li>
+<li>
+<p>ExecuteDoc</p>
+</li>
+<li>
+<p>MavenDoc</p>
+</li>
+<li>
+<p>GlossaryDoc</p>
+</li>
+<li>
+<p>GitLogMessage</p>
+</li>
+<li>
+<p>FindMainDoc</p>
+</li>
+<li>
+<p>DescriptionWithJavaParserDoc</p>
 </li>
 </ul>
 </div>
@@ -1684,6 +1692,38 @@ Result is display in a list.</p>
 <div class="ulist">
 <ul>
 <li>
+<p>FunctionnalityDoc</p>
+<div class="ulist">
+<ul>
+<li>
+<p>org.dojo.livingdoc.annotation</p>
+</li>
+<li>
+<p>org.reflections</p>
+</li>
+<li>
+<p>org.reflections.scanners</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>PomDoc</p>
+<div class="ulist">
+<ul>
+<li>
+<p>org.dojo.livingdoc.annotation</p>
+</li>
+<li>
+<p>org.w3c.dom</p>
+</li>
+<li>
+<p>org.xml.sax</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>DescriptionWithQDoxDoc</p>
 <div class="ulist">
 <ul>
@@ -1698,41 +1738,6 @@ Result is display in a list.</p>
 </li>
 <li>
 <p>org.dojo.livingdoc.application</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>GitLogMessage</p>
-<div class="ulist">
-<ul>
-<li>
-<p>org.dojo.livingdoc.annotation</p>
-</li>
-<li>
-<p>org.eclipse.jgit.api</p>
-</li>
-<li>
-<p>org.eclipse.jgit.api.errors</p>
-</li>
-<li>
-<p>org.eclipse.jgit.lib</p>
-</li>
-<li>
-<p>org.eclipse.jgit.revwalk</p>
-</li>
-<li>
-<p>org.eclipse.jgit.storage.file</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Changelog</p>
-<div class="ulist">
-<ul>
-<li>
-<p>org.dojo.livingdoc.annotation</p>
 </li>
 </ul>
 </div>
@@ -1796,7 +1801,7 @@ Result is display in a list.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-05 22:59:31 UTC
+Last updated 2020-01-06 22:31:02 UTC
 </div>
 </div>
 </body>

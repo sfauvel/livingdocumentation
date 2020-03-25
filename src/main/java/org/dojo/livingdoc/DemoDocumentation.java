@@ -183,7 +183,8 @@ public class DemoDocumentation {
                 "org.eclipse.jgit",
                 "com.github.javaparser",
                 "org.reflections",
-                "com.thoughtworks.qdox"
+                "com.thoughtworks.qdox",
+                "javax.xml.parsers"
         );
 
         Stream<GraphvizGenerator.Link> linkStream = demoClasses.entrySet().stream().flatMap(classListEntry -> {

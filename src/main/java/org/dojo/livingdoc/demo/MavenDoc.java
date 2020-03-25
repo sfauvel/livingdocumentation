@@ -4,7 +4,6 @@ import org.dojo.livingdoc.annotation.ClassDemo;
 import org.dojo.livingdoc.annotation.GenerateDoc;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,14 +28,14 @@ import java.util.stream.Stream;
  */
 @ClassDemo(group = "Execute to get information", label = "Execute maven command")
 public class MavenDoc {
-    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
+    public static void main(String[] args) throws IOException, SAXException {
         System.out.println(new MavenDoc().generateDendencies());
     }
 
     @GenerateDoc(name = "Dependencies executing maven command")
     // tag::example[]
     public String generateDendencies()
-            throws ParserConfigurationException, IOException, SAXException {
+            throws IOException, SAXException {
 
         Path PROJECT_PATH = Path.of("src", "main", "resources", "project");
         List<String> modules = getModules(PROJECT_PATH);
