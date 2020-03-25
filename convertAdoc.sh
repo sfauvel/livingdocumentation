@@ -2,7 +2,7 @@
 
 # https://github.com/asciidoctor/docker-asciidoctor
 
-DOCKER_IMAGE=asciidoctor/docker-asciidoctor
+DOCKER_IMAGE=asciidoctor/docker-asciidoctor:1.1.0
 DOCKER_WORKDIR=/documents
 
 FILENAME=demo
@@ -51,5 +51,5 @@ generate asciidoctor -D ${TARGET_PATH}
 echo "HTML documentation was generated as ${TARGET_PATH}/${FILENAME}.html"
 
 # Must generate html before to create images
-generate asciidoctor-pdf  -B ${TARGET_PATH} -o ${FILENAME}-full.pdf --attribute fullDoc
-echo "PDF documentation was generated as ${TARGET_PATH}/${FILENAME}.pdf"
+#generate asciidoctor-pdf  -B ${TARGET_PATH} -o ${FILENAME}-full.pdf --attribute fullDoc
+#echo "PDF documentation was generated as ${TARGET_PATH}/${FILENAME}.pdf"
