@@ -179,18 +179,18 @@ public class DemoDocumentation {
         }
 
         GraphvizGenerator graphvizGenerator = new GraphvizGenerator();
-        Set<String> importsToShow = Set.of(
-                "org.eclipse.jgit",
-                "com.github.javaparser",
-                "org.reflections",
-                "com.thoughtworks.qdox",
-                "javax.xml.parsers",
-                "io.github.livingdocumentation.dotdiagram"
+        Map<String, String> importsToShow = Map.of(
+                "org.eclipse.jgit","Execute git commands.",
+                "com.github.javaparser", "Parse java code.",
+                "org.reflections","Find classes, annotated classes and methods.",
+                "com.thoughtworks.qdox","Extract javadoc.",
+                "javax.xml.parsers","Read xml files.",
+                "io.github.livingdocumentation.dotdiagram", "Generate graphviz diagrams."
         );
 
         Stream<GraphvizGenerator.Link> linkStream = demoClasses.entrySet().stream().flatMap(classListEntry -> {
             Stream<String> importsInClass = classListEntry.getValue().stream()
-                    .map(classImports -> keepImportsOfClass(importsToShow, classImports))
+                    .map(classImports -> keepImportsOfClass(importsToShow.keySet(), classImports))
                     .distinct()
                     .filter(Objects::nonNull);
 
@@ -234,8 +234,10 @@ public class DemoDocumentation {
 
         return String.join("\n",
                 "In these demos, we use libraries:",
-                importsToShow.stream().
-                        collect(Collectors.joining("\n* ", "\n* ", "\n")),
+                importsToShow.entrySet().stream()
+                        .map(e -> "*" + e.getKey() + "*: " + e.getValue())
+                        .sorted()
+                        .collect(Collectors.joining("\n* ", "\n* ", "\n")),
                 "The graph below shows which libraries is used in demos.",
 
                 graphvizGenerator.generate(

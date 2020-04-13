@@ -617,22 +617,22 @@ To generate full documentation, just call</p>
 <div class="ulist">
 <ul>
 <li>
-<p>org.reflections</p>
+<p><strong>com.github.javaparser</strong>: Parse java code.</p>
 </li>
 <li>
-<p>com.github.javaparser</p>
+<p><strong>com.thoughtworks.qdox</strong>: Extract javadoc.</p>
 </li>
 <li>
-<p>javax.xml.parsers</p>
+<p><strong>io.github.livingdocumentation.dotdiagram</strong>: Generate graphviz diagrams.</p>
 </li>
 <li>
-<p>com.thoughtworks.qdox</p>
+<p><strong>javax.xml.parsers</strong>: Read xml files.</p>
 </li>
 <li>
-<p>io.github.livingdocumentation.dotdiagram</p>
+<p><strong>org.eclipse.jgit</strong>: Execute git commands.</p>
 </li>
 <li>
-<p>org.eclipse.jgit</p>
+<p><strong>org.reflections</strong>: Find classes, annotated classes and methods.</p>
 </li>
 </ul>
 </div>
@@ -641,7 +641,7 @@ To generate full documentation, just call</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-32a3067d32348055dbbd13fcb78c21c6.png" alt="diag 32a3067d32348055dbbd13fcb78c21c6" width="2963" height="207">
+<img src="diag-fd384e6b101ec588ed1ec84438765b64.png" alt="diag fd384e6b101ec588ed1ec84438765b64" width="2963" height="207">
 </div>
 </div>
 </div>
@@ -780,13 +780,13 @@ This annotation contains attributs to specify additional information.</p>
 <div class="content">
 <div class="dlist">
 <dl>
-<dt class="hdlist1">Person</dt>
-<dd>
-<p>A physical person.</p>
-</dd>
 <dt class="hdlist1">City</dt>
 <dd>
 <p>Description of a city.</p>
+</dd>
+<dt class="hdlist1">Person</dt>
+<dd>
+<p>A physical person.</p>
 </dd>
 </dl>
 </div>
@@ -844,6 +844,9 @@ This annotation contains attributs to specify additional information.</p>
 <div class="ulist">
 <ul>
 <li>
+<p><strong>13/04/2020</strong> (e83e6796ec): Add a demo using dot-diagram</p>
+</li>
+<li>
 <p><strong>25/03/2020</strong> (78e4d74f51): Fix asciidoctor version, use Rouge instead of pygments</p>
 </li>
 <li>
@@ -869,9 +872,6 @@ This annotation contains attributs to specify additional information.</p>
 </li>
 <li>
 <p><strong>21/11/2019</strong> (7dc8ed7417): Reorganized project, add style, generate full and light doc</p>
-</li>
-<li>
-<p><strong>20/11/2019</strong> (634bf44e48): Reorganize demo</p>
 </li>
 </ul>
 </div>
@@ -1118,12 +1118,12 @@ Values returned are defaults values returned by the object.</p>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">isVerbose</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">getVersion</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">5.2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">isVerbose</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 </tbody>
 </table>
@@ -1516,37 +1516,34 @@ Result is display in a list.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>CallFlowDoc</p>
-</li>
-<li>
-<p>DescriptionWithQDoxDoc</p>
-</li>
-<li>
-<p>ParseDoc</p>
-</li>
-<li>
-<p>GitLogMessage</p>
+<p>ReferenceToCodeDoc</p>
 </li>
 <li>
 <p>FunctionnalityDoc</p>
 </li>
 <li>
-<p>ReferenceToCodeDoc</p>
+<p>PomDoc</p>
 </li>
 <li>
-<p>MavenDoc</p>
+<p>AsciidoctorGeneration</p>
 </li>
 <li>
-<p>WorkflowDocWithDotDiagram</p>
+<p>WorkflowDoc</p>
 </li>
 <li>
 <p>FindMainDoc</p>
 </li>
 <li>
-<p>PomDoc</p>
+<p>ClassToDocument</p>
 </li>
 <li>
-<p>WorkflowDoc</p>
+<p>MavenDoc</p>
+</li>
+<li>
+<p>CallFlowDoc</p>
+</li>
+<li>
+<p>ExecuteDoc</p>
 </li>
 <li>
 <p>DemoDocumentation</p>
@@ -1555,16 +1552,19 @@ Result is display in a list.</p>
 <p>DescriptionWithJavaParserDoc</p>
 </li>
 <li>
+<p>DescriptionWithQDoxDoc</p>
+</li>
+<li>
 <p>GlossaryDoc</p>
 </li>
 <li>
-<p>ClassToDocument</p>
+<p>ParseDoc</p>
 </li>
 <li>
-<p>ExecuteDoc</p>
+<p>WorkflowDocWithDotDiagram</p>
 </li>
 <li>
-<p>AsciidoctorGeneration</p>
+<p>GitLogMessage</p>
 </li>
 </ul>
 </div>
@@ -1691,58 +1691,37 @@ Result is display in a list.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>CallFlowDoc</p>
+<p>ReferenceToCodeDoc</p>
 <div class="ulist">
 <ul>
 <li>
 <p>org.dojo.livingdoc.annotation</p>
-</li>
-<li>
-<p>org.dojo.livingdoc.application</p>
-</li>
-<li>
-<p>org.dojo.livingdoc.application.service</p>
-</li>
-<li>
-<p>org.mockito</p>
-</li>
-<li>
-<p>org.mockito.invocation</p>
-</li>
-<li>
-<p>org.mockito.stubbing</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>DescriptionWithQDoxDoc</p>
+<p>Changelog</p>
 <div class="ulist">
 <ul>
 <li>
-<p>com.thoughtworks.qdox</p>
-</li>
-<li>
-<p>com.thoughtworks.qdox.model</p>
-</li>
-<li>
 <p>org.dojo.livingdoc.annotation</p>
-</li>
-<li>
-<p>org.dojo.livingdoc.application</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>WorkflowDoc</p>
+<p>FunctionnalityDoc</p>
 <div class="ulist">
 <ul>
 <li>
 <p>org.dojo.livingdoc.annotation</p>
 </li>
 <li>
-<p>org.dojo.livingdoc.demo.Workflow.State</p>
+<p>org.reflections</p>
+</li>
+<li>
+<p>org.reflections.scanners</p>
 </li>
 </ul>
 </div>
@@ -1806,7 +1785,7 @@ Result is display in a list.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-13 20:51:48 UTC
+Last updated 2020-04-13 21:13:21 UTC
 </div>
 </div>
 <style>
