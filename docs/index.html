@@ -492,6 +492,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_get_information_executing_code">Get information executing code.</a></li>
 <li><a href="#_show_methods_called">Show methods called</a></li>
 <li><a href="#_show_workflow_from_code">Show workflow from code</a></li>
+<li><a href="#_show_workflow_using_dot_diagram">Show workflow using dot-diagram</a></li>
 </ul>
 </li>
 <li><a href="#_extract_javadoc">Extract javadoc</a>
@@ -616,19 +617,22 @@ To generate full documentation, just call</p>
 <div class="ulist">
 <ul>
 <li>
-<p>com.thoughtworks.qdox</p>
-</li>
-<li>
-<p>org.eclipse.jgit</p>
-</li>
-<li>
 <p>org.reflections</p>
+</li>
+<li>
+<p>com.github.javaparser</p>
 </li>
 <li>
 <p>javax.xml.parsers</p>
 </li>
 <li>
-<p>com.github.javaparser</p>
+<p>com.thoughtworks.qdox</p>
+</li>
+<li>
+<p>io.github.livingdocumentation.dotdiagram</p>
+</li>
+<li>
+<p>org.eclipse.jgit</p>
 </li>
 </ul>
 </div>
@@ -637,7 +641,7 @@ To generate full documentation, just call</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-fe3094841d78c0c2754b036a26736454.png" alt="diag fe3094841d78c0c2754b036a26736454" width="2403" height="207">
+<img src="diag-32a3067d32348055dbbd13fcb78c21c6.png" alt="diag 32a3067d32348055dbbd13fcb78c21c6" width="2963" height="207">
 </div>
 </div>
 </div>
@@ -840,6 +844,9 @@ This annotation contains attributs to specify additional information.</p>
 <div class="ulist">
 <ul>
 <li>
+<p><strong>25/03/2020</strong> (78e4d74f51): Fix asciidoctor version, use Rouge instead of pygments</p>
+</li>
+<li>
 <p><strong>25/03/2020</strong> (3ef7e83c7b): Remove useless dependency</p>
 </li>
 <li>
@@ -865,9 +872,6 @@ This annotation contains attributs to specify additional information.</p>
 </li>
 <li>
 <p><strong>20/11/2019</strong> (634bf44e48): Reorganize demo</p>
-</li>
-<li>
-<p><strong>20/11/2019</strong> (831d425b5c): Add sequence diagram with plantuml</p>
 </li>
 </ul>
 </div>
@@ -1114,12 +1118,12 @@ Values returned are defaults values returned by the object.</p>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">getVersion</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">5.2</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">isVerbose</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">getVersion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5.2</p></td>
 </tr>
 </tbody>
 </table>
@@ -1266,6 +1270,63 @@ We extract information to display a graph.</p>
 <img src="diag-00d920984439a54eaedc0d83f95e9a98.png" alt="diag 00d920984439a54eaedc0d83f95e9a98" width="470" height="347">
 </div>
 <div class="title">Figure 2. Workflow graph generated</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_show_workflow_using_dot_diagram">Show workflow using dot-diagram</h4>
+<div class="paragraph sourceFile">
+<p>From: org.dojo.livingdoc.demo.WorkflowDocWithDotDiagram</p>
+</div>
+<div class="paragraph">
+<p>Show algorithm workflow.</p>
+</div>
+<div class="paragraph">
+<p>Wokflow configuration is defined in code.
+We extract information to display a graph.</p>
+</div>
+<div class="paragraph">
+<p>We use graphviz to draw the graph and <a href="https://github.com/LivingDocumentation/dot-diagram">dot-diagram</a> to generate dot text.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="imageblock">
+<div class="content">
+<img src="diag-22766b8e56a676e91ea653a8aa680680.png" alt="diag 22766b8e56a676e91ea653a8aa680680" width="83" height="155">
+</div>
+</div>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code to extract information</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kd">public</span> <span class="nc">String</span> <span class="nf">generateWorkflowGraph</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Error</span> <span class="o">{</span>
+
+    <span class="kd">final</span> <span class="nc">Workflow</span> <span class="n">workflow</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Workflow</span><span class="o">();</span>
+
+    <span class="kd">final</span> <span class="nc">DotGraph</span> <span class="n">graph</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DotGraph</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="nc">DotGraph</span><span class="o">.</span><span class="na">Digraph</span> <span class="n">digraph</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="na">getDigraph</span><span class="o">();</span>
+    <span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="nc">Workflow</span><span class="o">.</span><span class="na">State</span><span class="o">.</span><span class="na">values</span><span class="o">()).</span><span class="na">forEach</span><span class="o">(</span><span class="n">state</span> <span class="o">-&gt;</span> <span class="n">addStateTransitions</span><span class="o">(</span><span class="n">digraph</span><span class="o">,</span> <span class="n">workflow</span><span class="o">,</span> <span class="n">state</span><span class="o">));</span>
+
+    <span class="k">return</span> <span class="nc">String</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">"\n"</span><span class="o">,</span>
+            <span class="s">""</span><span class="o">,</span>
+            <span class="s">"[graphviz]"</span><span class="o">,</span>
+            <span class="s">"----"</span><span class="o">,</span>
+            <span class="n">graph</span><span class="o">.</span><span class="na">render</span><span class="o">(),</span>
+            <span class="s">"----"</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">addStateTransitions</span><span class="o">(</span><span class="nc">DotGraph</span><span class="o">.</span><span class="na">Digraph</span> <span class="n">digraph</span><span class="o">,</span> <span class="nc">Workflow</span> <span class="n">workflow</span><span class="o">,</span> <span class="nc">Workflow</span><span class="o">.</span><span class="na">State</span> <span class="n">currentState</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">digraph</span><span class="o">.</span><span class="na">addNode</span><span class="o">(</span><span class="n">currentState</span><span class="o">.</span><span class="na">name</span><span class="o">()).</span><span class="na">setLabel</span><span class="o">(</span><span class="n">currentState</span><span class="o">.</span><span class="na">name</span><span class="o">());</span>
+    <span class="n">workflow</span><span class="o">.</span><span class="na">availableTransition</span><span class="o">(</span><span class="n">currentState</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">availableState</span> <span class="o">-&gt;</span> <span class="n">digraph</span><span class="o">.</span><span class="na">addAssociation</span><span class="o">(</span><span class="n">currentState</span><span class="o">.</span><span class="na">name</span><span class="o">(),</span> <span class="n">availableState</span><span class="o">.</span><span class="na">name</span><span class="o">()));</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-1a74a5a81261c3a5664684e36b7e4d41.png" alt="diag 1a74a5a81261c3a5664684e36b7e4d41" width="293" height="352">
+</div>
+<div class="title">Figure 3. Workflow graph generated using dot-diagram</div>
 </div>
 </div>
 </div>
@@ -1455,52 +1516,55 @@ Result is display in a list.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>DescriptionWithJavaParserDoc</p>
-</li>
-<li>
 <p>CallFlowDoc</p>
-</li>
-<li>
-<p>FindMainDoc</p>
-</li>
-<li>
-<p>ClassToDocument</p>
-</li>
-<li>
-<p>MavenDoc</p>
-</li>
-<li>
-<p>GitLogMessage</p>
-</li>
-<li>
-<p>ReferenceToCodeDoc</p>
-</li>
-<li>
-<p>DemoDocumentation</p>
 </li>
 <li>
 <p>DescriptionWithQDoxDoc</p>
 </li>
 <li>
-<p>FunctionnalityDoc</p>
-</li>
-<li>
-<p>GlossaryDoc</p>
-</li>
-<li>
-<p>AsciidoctorGeneration</p>
-</li>
-<li>
 <p>ParseDoc</p>
 </li>
 <li>
-<p>ExecuteDoc</p>
+<p>GitLogMessage</p>
+</li>
+<li>
+<p>FunctionnalityDoc</p>
+</li>
+<li>
+<p>ReferenceToCodeDoc</p>
+</li>
+<li>
+<p>MavenDoc</p>
+</li>
+<li>
+<p>WorkflowDocWithDotDiagram</p>
+</li>
+<li>
+<p>FindMainDoc</p>
+</li>
+<li>
+<p>PomDoc</p>
 </li>
 <li>
 <p>WorkflowDoc</p>
 </li>
 <li>
-<p>PomDoc</p>
+<p>DemoDocumentation</p>
+</li>
+<li>
+<p>DescriptionWithJavaParserDoc</p>
+</li>
+<li>
+<p>GlossaryDoc</p>
+</li>
+<li>
+<p>ClassToDocument</p>
+</li>
+<li>
+<p>ExecuteDoc</p>
+</li>
+<li>
+<p>AsciidoctorGeneration</p>
 </li>
 </ul>
 </div>
@@ -1627,56 +1691,6 @@ Result is display in a list.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>DescriptionWithQDoxDoc</p>
-<div class="ulist">
-<ul>
-<li>
-<p>com.thoughtworks.qdox</p>
-</li>
-<li>
-<p>com.thoughtworks.qdox.model</p>
-</li>
-<li>
-<p>org.dojo.livingdoc.annotation</p>
-</li>
-<li>
-<p>org.dojo.livingdoc.application</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>DescriptionWithJavaParserDoc</p>
-<div class="ulist">
-<ul>
-<li>
-<p>com.github.javaparser.ast</p>
-</li>
-<li>
-<p>com.github.javaparser.ast.body</p>
-</li>
-<li>
-<p>com.github.javaparser.ast.comments</p>
-</li>
-<li>
-<p>com.github.javaparser.ast.visitor</p>
-</li>
-<li>
-<p>com.github.javaparser.javadoc.description</p>
-</li>
-<li>
-<p>com.github.javaparser.utils</p>
-</li>
-<li>
-<p>org.dojo.livingdoc.application</p>
-</li>
-<li>
-<p>org.dojo.livingdoc.annotation</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>CallFlowDoc</p>
 <div class="ulist">
 <ul>
@@ -1697,6 +1711,38 @@ Result is display in a list.</p>
 </li>
 <li>
 <p>org.mockito.stubbing</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>DescriptionWithQDoxDoc</p>
+<div class="ulist">
+<ul>
+<li>
+<p>com.thoughtworks.qdox</p>
+</li>
+<li>
+<p>com.thoughtworks.qdox.model</p>
+</li>
+<li>
+<p>org.dojo.livingdoc.annotation</p>
+</li>
+<li>
+<p>org.dojo.livingdoc.application</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>WorkflowDoc</p>
+<div class="ulist">
+<ul>
+<li>
+<p>org.dojo.livingdoc.annotation</p>
+</li>
+<li>
+<p>org.dojo.livingdoc.demo.Workflow.State</p>
 </li>
 </ul>
 </div>
@@ -1760,7 +1806,7 @@ Result is display in a list.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-25 22:16:36 UTC
+Last updated 2020-04-13 20:51:48 UTC
 </div>
 </div>
 <style>

@@ -184,7 +184,8 @@ public class DemoDocumentation {
                 "com.github.javaparser",
                 "org.reflections",
                 "com.thoughtworks.qdox",
-                "javax.xml.parsers"
+                "javax.xml.parsers",
+                "io.github.livingdocumentation.dotdiagram"
         );
 
         Stream<GraphvizGenerator.Link> linkStream = demoClasses.entrySet().stream().flatMap(classListEntry -> {
