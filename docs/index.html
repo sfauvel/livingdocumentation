@@ -508,6 +508,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_static_analysis">Static analysis</a>
 <ul class="sectlevel3">
+<li><a href="#_document_formula_with_stem">Document formula with stem</a></li>
 <li><a href="#_extract_a_code_fragment">Extract a code fragment</a></li>
 <li><a href="#_extract_imports_parsing_code">Extract imports parsing code</a></li>
 <li><a href="#_extract_information_from_pom_xml">Extract information from pom.xml</a></li>
@@ -641,7 +642,7 @@ To generate full documentation, just call</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-fd384e6b101ec588ed1ec84438765b64.png" alt="diag fd384e6b101ec588ed1ec84438765b64" width="2963" height="207">
+<img src="diag-dffb5712f6d727e80f4bb5a1cf7dcffe.png" alt="diag dffb5712f6d727e80f4bb5a1cf7dcffe" width="3166" height="207">
 </div>
 </div>
 </div>
@@ -780,13 +781,13 @@ This annotation contains attributs to specify additional information.</p>
 <div class="content">
 <div class="dlist">
 <dl>
-<dt class="hdlist1">City</dt>
-<dd>
-<p>Description of a city.</p>
-</dd>
 <dt class="hdlist1">Person</dt>
 <dd>
 <p>A physical person.</p>
+</dd>
+<dt class="hdlist1">City</dt>
+<dd>
+<p>Description of a city.</p>
 </dd>
 </dl>
 </div>
@@ -844,6 +845,9 @@ This annotation contains attributs to specify additional information.</p>
 <div class="ulist">
 <ul>
 <li>
+<p><strong>13/04/2020</strong> (8e3c5574f6): Add information on library used in demos</p>
+</li>
+<li>
 <p><strong>13/04/2020</strong> (e83e6796ec): Add a demo using dot-diagram</p>
 </li>
 <li>
@@ -869,9 +873,6 @@ This annotation contains attributs to specify additional information.</p>
 </li>
 <li>
 <p><strong>22/11/2019</strong> (03a604aa18): Modify output folder for generation</p>
-</li>
-<li>
-<p><strong>21/11/2019</strong> (7dc8ed7417): Reorganized project, add style, generate full and light doc</p>
 </li>
 </ul>
 </div>
@@ -1516,55 +1517,58 @@ Result is display in a list.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>ReferenceToCodeDoc</p>
+<p>PomDoc</p>
 </li>
 <li>
 <p>FunctionnalityDoc</p>
 </li>
 <li>
-<p>PomDoc</p>
-</li>
-<li>
-<p>AsciidoctorGeneration</p>
-</li>
-<li>
-<p>WorkflowDoc</p>
+<p>DemoDocumentation</p>
 </li>
 <li>
 <p>FindMainDoc</p>
 </li>
 <li>
-<p>ClassToDocument</p>
+<p>ReferenceToCodeDoc</p>
+</li>
+<li>
+<p>FormulaDoc</p>
+</li>
+<li>
+<p>GitLogMessage</p>
+</li>
+<li>
+<p>WorkflowDoc</p>
 </li>
 <li>
 <p>MavenDoc</p>
 </li>
 <li>
+<p>DescriptionWithQDoxDoc</p>
+</li>
+<li>
 <p>CallFlowDoc</p>
 </li>
 <li>
-<p>ExecuteDoc</p>
-</li>
-<li>
-<p>DemoDocumentation</p>
+<p>ClassToDocument</p>
 </li>
 <li>
 <p>DescriptionWithJavaParserDoc</p>
 </li>
 <li>
-<p>DescriptionWithQDoxDoc</p>
-</li>
-<li>
 <p>GlossaryDoc</p>
 </li>
 <li>
-<p>ParseDoc</p>
+<p>AsciidoctorGeneration</p>
 </li>
 <li>
 <p>WorkflowDocWithDotDiagram</p>
 </li>
 <li>
-<p>GitLogMessage</p>
+<p>ParseDoc</p>
+</li>
+<li>
+<p>ExecuteDoc</p>
 </li>
 </ul>
 </div>
@@ -1574,6 +1578,189 @@ Result is display in a list.</p>
 </div>
 <div class="sect2">
 <h3 id="_static_analysis">Static analysis</h3>
+<div class="sect3">
+<h4 id="_document_formula_with_stem">Document formula with stem</h4>
+<div class="paragraph sourceFile">
+<p>From: org.dojo.livingdoc.demo.FormulaDoc</p>
+</div>
+<div class="paragraph">
+<p>Display formula like \$sum_(i=1)^n i^3\$ using default formula syntax <a href="http://asciimath.org/">asciimath</a>.</p>
+</div>
+<div class="paragraph">
+<p>It needs to add <code>:stem:</code> option in document (see <a href="https://asciidoctor.org/docs/user-manual/#activating-stem-support" class="bare">https://asciidoctor.org/docs/user-manual/#activating-stem-support</a>)</p>
+</div>
+<div class="listingblock">
+<div class="title">Method to document</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="cm">/**
+ *  stem:[(1.55^"level") + sqrt(12*"level") + 50]
+ */</span>
+<span class="kd">public</span> <span class="kt">double</span> <span class="nf">xpNeedsToNextLevel</span><span class="o">(</span><span class="kt">int</span> <span class="n">level</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nc">Math</span><span class="o">.</span><span class="na">pow</span><span class="o">(</span><span class="mf">1.55</span><span class="o">,</span> <span class="n">level</span><span class="o">)</span> <span class="o">+</span> <span class="nc">Math</span><span class="o">.</span><span class="na">sqrt</span><span class="o">(</span><span class="mi">12</span><span class="o">*</span><span class="n">level</span><span class="o">)</span> <span class="o">+</span> <span class="mi">50</span><span class="o">;</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can extract formula from Javadoc.
+It&#8217;s easy (see generateFormulaFromJavaDoc method) but it&#8217;s not the real formula used in code.</p>
+</div>
+<div class="paragraph">
+<p>Another way of doing is to parse code and format it using asciimath syntax.
+Below, we show a naive implementation used to parse example.</p>
+</div>
+<div class="listingblock">
+<div class="title">Formula parser</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">fromJava</span><span class="o">(</span><span class="nc">String</span> <span class="n">javaFormula</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nf">FormulaAsciiMath</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">javaFormula</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">private</span> <span class="nc">String</span> <span class="nf">parse</span><span class="o">(</span><span class="nc">String</span> <span class="n">javaFormula</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="nc">Provider</span> <span class="n">codeProvider</span> <span class="o">=</span> <span class="nc">Providers</span><span class="o">.</span><span class="na">provider</span><span class="o">(</span><span class="s">"class X { String formula = "</span> <span class="o">+</span> <span class="n">javaFormula</span> <span class="o">+</span> <span class="s">" }"</span><span class="o">);</span>
+    <span class="nc">ParseResult</span><span class="o">&lt;</span><span class="nc">CompilationUnit</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="o">(</span><span class="k">new</span> <span class="nc">JavaParser</span><span class="o">()).</span><span class="na">parse</span><span class="o">(</span><span class="nc">ParseStart</span><span class="o">.</span><span class="na">COMPILATION_UNIT</span><span class="o">,</span> <span class="n">codeProvider</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(!</span><span class="n">result</span><span class="o">.</span><span class="na">isSuccessful</span><span class="o">())</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">getProblems</span><span class="o">().</span><span class="na">stream</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">problem</span> <span class="o">-&gt;</span> <span class="n">problem</span><span class="o">.</span><span class="na">getVerboseMessage</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="nc">Collectors</span><span class="o">.</span><span class="na">joining</span><span class="o">(</span><span class="s">"\n"</span><span class="o">)));</span>
+    <span class="o">}</span>
+
+    <span class="kd">final</span> <span class="nc">CompilationUnit</span> <span class="n">compilationUnit</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getResult</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+
+    <span class="kd">final</span> <span class="nc">FormulaVisitor</span> <span class="n">formulaVisitor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FormulaVisitor</span><span class="o">();</span>
+    <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Stack</span><span class="o">&lt;&gt;();</span>
+    <span class="n">compilationUnit</span><span class="o">.</span><span class="na">accept</span><span class="o">(</span><span class="n">formulaVisitor</span><span class="o">,</span> <span class="n">stack</span><span class="o">);</span>
+
+    <span class="k">return</span>  <span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">FormulaVisitor</span> <span class="kd">extends</span> <span class="nc">VoidVisitorAdapter</span><span class="o">&lt;</span><span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="nc">IntegerLiteralExpr</span> <span class="n">n</span><span class="o">,</span> <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">arg</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">visit</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">arg</span><span class="o">);</span>
+        <span class="n">arg</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">n</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="nc">DoubleLiteralExpr</span> <span class="n">n</span><span class="o">,</span> <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">arg</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">visit</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">arg</span><span class="o">);</span>
+        <span class="n">arg</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">n</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="nc">BinaryExpr</span> <span class="n">n</span><span class="o">,</span> <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">arg</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">n</span><span class="o">.</span><span class="na">getLeft</span><span class="o">().</span><span class="na">accept</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">arg</span><span class="o">);</span>
+        <span class="nc">String</span> <span class="n">left</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+        <span class="n">n</span><span class="o">.</span><span class="na">getRight</span><span class="o">().</span><span class="na">accept</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">arg</span><span class="o">);</span>
+        <span class="nc">String</span> <span class="n">right</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+        <span class="n">arg</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">n</span><span class="o">.</span><span class="na">getOperator</span><span class="o">().</span><span class="na">asString</span><span class="o">()</span> <span class="o">+</span> <span class="n">right</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="nc">NameExpr</span> <span class="n">n</span><span class="o">,</span> <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">arg</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">visit</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">arg</span><span class="o">);</span>
+        <span class="n">arg</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="s">"\""</span> <span class="o">+</span> <span class="n">n</span><span class="o">.</span><span class="na">getNameAsString</span><span class="o">()</span> <span class="o">+</span> <span class="s">"\""</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="nc">MethodCallExpr</span> <span class="n">n</span><span class="o">,</span> <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">arg</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Expression</span> <span class="n">expression</span> <span class="o">:</span> <span class="n">n</span><span class="o">.</span><span class="na">getArguments</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">expression</span><span class="o">.</span><span class="na">accept</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">arg</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="kd">final</span> <span class="nc">String</span> <span class="n">mathFunction</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">asString</span><span class="o">();</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="s">"pow"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">mathFunction</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">exponent</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="nc">String</span> <span class="n">base</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="n">arg</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="s">"("</span> <span class="o">+</span> <span class="n">base</span> <span class="o">+</span> <span class="s">"^"</span> <span class="o">+</span> <span class="n">exponent</span> <span class="o">+</span> <span class="s">")"</span><span class="o">);</span>
+
+        <span class="o">}</span> <span class="k">else</span>  <span class="k">if</span> <span class="o">(</span><span class="s">"sqrt"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">mathFunction</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="n">arg</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">mathFunction</span> <span class="o">+</span> <span class="s">"("</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s">")"</span><span class="o">);</span>
+
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"Function '"</span><span class="o">+</span><span class="n">mathFunction</span><span class="o">+</span><span class="s">"' not supported"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code to extract information</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kd">public</span> <span class="nf">FormulaDoc</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaProjectBuilder</span><span class="o">();</span>
+    <span class="n">builder</span><span class="o">.</span><span class="na">addSourceTree</span><span class="o">(</span><span class="k">new</span> <span class="nc">File</span><span class="o">(</span><span class="s">"src/main/java"</span><span class="o">));</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="nc">String</span> <span class="nf">generateFormulaFromJavaDoc</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">JavaProjectBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaProjectBuilder</span><span class="o">();</span>
+    <span class="n">builder</span><span class="o">.</span><span class="na">addSourceTree</span><span class="o">(</span><span class="k">new</span> <span class="nc">File</span><span class="o">(</span><span class="s">"src/main/java"</span><span class="o">));</span>
+
+    <span class="nc">JavaClass</span> <span class="n">javaClass</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">getClassByName</span><span class="o">(</span><span class="nc">SpecificRule</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+    <span class="kd">final</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">JavaMethod</span><span class="o">&gt;</span> <span class="n">methods</span> <span class="o">=</span> <span class="n">javaClass</span><span class="o">.</span><span class="na">getMethods</span><span class="o">();</span>
+
+    <span class="k">return</span> <span class="n">methods</span><span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">method</span> <span class="o">-&gt;</span> <span class="n">method</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">": "</span> <span class="o">+</span> <span class="n">method</span><span class="o">.</span><span class="na">getComment</span><span class="o">())</span>
+            <span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="nc">Collectors</span><span class="o">.</span><span class="na">joining</span><span class="o">(</span><span class="s">"\n"</span><span class="o">));</span>
+
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="nc">String</span> <span class="nf">generateFormulaParsingCode</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="nc">Class</span> <span class="n">classWithFormula</span> <span class="o">=</span> <span class="nc">SpecificRule</span><span class="o">.</span><span class="na">class</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="nc">String</span> <span class="n">methodWithFormula</span> <span class="o">=</span> <span class="s">"xpNeedsToNextLevel"</span><span class="o">;</span>
+
+    <span class="nc">String</span> <span class="n">javaCode</span> <span class="o">=</span> <span class="n">extractMethodBody</span><span class="o">(</span><span class="n">classWithFormula</span><span class="o">,</span> <span class="n">methodWithFormula</span><span class="o">);</span>
+    <span class="nc">String</span> <span class="n">formulaCode</span> <span class="o">=</span> <span class="n">javaCode</span><span class="o">.</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">"^\\{\\s*return (.*)\\s*\\}$"</span><span class="o">,</span> <span class="s">"$1"</span><span class="o">);</span>
+
+    <span class="k">return</span> <span class="n">methodWithFormula</span> <span class="o">+</span> <span class="s">": stem:["</span> <span class="o">+</span> <span class="nc">FormulaAsciiMath</span><span class="o">.</span><span class="na">fromJava</span><span class="o">(</span><span class="n">formulaCode</span><span class="o">)</span> <span class="o">+</span> <span class="s">"]"</span><span class="o">;</span>
+
+<span class="o">}</span>
+
+<span class="kd">private</span> <span class="nc">String</span> <span class="nf">extractMethodBody</span><span class="o">(</span><span class="nc">Class</span> <span class="n">classWithFormula</span><span class="o">,</span> <span class="nc">String</span> <span class="n">methodWithFormula</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">SourceRoot</span> <span class="n">sourceRoot</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SourceRoot</span><span class="o">(</span><span class="nc">Paths</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"src/main/java"</span><span class="o">));</span>
+
+    <span class="nc">CompilationUnit</span> <span class="n">cu</span> <span class="o">=</span> <span class="n">sourceRoot</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span>
+            <span class="n">classWithFormula</span><span class="o">.</span><span class="na">getPackage</span><span class="o">().</span><span class="na">getName</span><span class="o">(),</span>
+            <span class="n">classWithFormula</span><span class="o">.</span><span class="na">getSimpleName</span><span class="o">()</span> <span class="o">+</span> <span class="s">".java"</span><span class="o">);</span>
+
+    <span class="nc">StringBuffer</span> <span class="n">javaCode</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuffer</span><span class="o">();</span>
+    <span class="n">cu</span><span class="o">.</span><span class="na">accept</span><span class="o">(</span><span class="k">new</span> <span class="nc">VoidVisitorAdapter</span><span class="o">&lt;</span><span class="nc">StringBuffer</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="nc">MethodDeclaration</span> <span class="n">n</span><span class="o">,</span> <span class="nc">StringBuffer</span> <span class="n">arg</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">methodWithFormula</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">n</span><span class="o">.</span><span class="na">getNameAsString</span><span class="o">()))</span> <span class="o">{</span>
+                <span class="kd">final</span> <span class="nc">String</span> <span class="n">str</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="na">getBody</span><span class="o">()</span>
+                        <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">body</span> <span class="o">-&gt;</span> <span class="n">body</span><span class="o">.</span><span class="na">toString</span><span class="o">())</span>
+                        <span class="o">.</span><span class="na">orElse</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"BODY:"</span> <span class="o">+</span> <span class="n">str</span><span class="o">);</span>
+                <span class="n">javaCode</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">},</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">javaCode</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="title">Example 10. Formula from javadoc</div>
+<div class="content">
+<div class="paragraph">
+<p>xpNeedsToNextLevel: \$(1.55^"level") + sqrt(12*"level") + 50\$</p>
+</div>
+</div>
+</div>
+<div class="exampleblock">
+<div class="title">Example 11. Formula from java code using parsing</div>
+<div class="content">
+<div class="paragraph">
+<p>xpNeedsToNextLevel: \$(1.55^"level")+sqrt(12*"level")+50\$</p>
+</div>
+</div>
+</div>
+</div>
 <div class="sect3">
 <h4 id="_extract_a_code_fragment">Extract a code fragment</h4>
 <div class="paragraph sourceFile">
@@ -1609,7 +1796,7 @@ Result is display in a list.</p>
 </div>
 </div>
 <div class="exampleblock">
-<div class="title">Example 10. Include a fragment of code</div>
+<div class="title">Example 12. Include a fragment of code</div>
 <div class="content">
 <div class="listingblock">
 <div class="title">Best practice to follow</div>
@@ -1686,42 +1873,51 @@ Result is display in a list.</p>
 </div>
 </div>
 <div class="exampleblock">
-<div class="title">Example 11. Parse code to extract information</div>
+<div class="title">Example 13. Parse code to extract information</div>
 <div class="content">
 <div class="ulist">
 <ul>
 <li>
-<p>ReferenceToCodeDoc</p>
+<p>GlossaryDoc</p>
 <div class="ulist">
 <ul>
 <li>
-<p>org.dojo.livingdoc.annotation</p>
-</li>
-</ul>
-</div>
+<p>com.thoughtworks.qdox</p>
 </li>
 <li>
-<p>Changelog</p>
-<div class="ulist">
-<ul>
-<li>
-<p>org.dojo.livingdoc.annotation</p>
+<p>com.thoughtworks.qdox.model</p>
 </li>
-</ul>
-</div>
-</li>
-<li>
-<p>FunctionnalityDoc</p>
-<div class="ulist">
-<ul>
 <li>
 <p>org.dojo.livingdoc.annotation</p>
 </li>
 <li>
 <p>org.reflections</p>
 </li>
+</ul>
+</div>
+</li>
 <li>
-<p>org.reflections.scanners</p>
+<p>WorkflowDoc</p>
+<div class="ulist">
+<ul>
+<li>
+<p>org.dojo.livingdoc.annotation</p>
+</li>
+<li>
+<p>org.dojo.livingdoc.demo.Workflow.State</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>MavenDoc</p>
+<div class="ulist">
+<ul>
+<li>
+<p>org.dojo.livingdoc.annotation</p>
+</li>
+<li>
+<p>org.xml.sax</p>
 </li>
 </ul>
 </div>
@@ -1771,7 +1967,7 @@ Result is display in a list.</p>
 </div>
 </div>
 <div class="exampleblock">
-<div class="title">Example 12. Content of tag 'description' from pom.xml</div>
+<div class="title">Example 14. Content of tag 'description' from pom.xml</div>
 <div class="content">
 <div class="paragraph">
 <p>Demo of living documentation</p>
@@ -1785,7 +1981,7 @@ Result is display in a list.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-13 21:13:21 UTC
+Last updated 2020-07-29 22:11:48 UTC
 </div>
 </div>
 <style>
@@ -1999,5 +2195,29 @@ pre.rouge {
   background-color: #f8f8f8;
 }
 </style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains('stemblock')) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>
 </html>

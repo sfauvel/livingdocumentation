@@ -121,6 +121,7 @@ public interface Formatter {
             return String.join("\n",
                     ":sourcedir: ..",
                     ":source-highlighter: rouge",
+                    ":stem:", // formula formatter
                     ":docinfo:",
                     ""
             );
